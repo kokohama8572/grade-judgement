@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>등급 판정 — 분석기 시뮬레이션</title>
+  <meta name="description" content="기후 난민과 팬데믹 공포 속에서 AI '분석기'가 매긴 등급에 따라 12년을 살아가는 시뮬레이션 게임.">
+  <meta name="theme-color" content="#080b10">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23080b10'/%3E%3Cpath d='M8 22V10h8a5 5 0 0 1 0 10h-3' fill='none' stroke='%235ad0c4' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#screen-game">본문으로 건너뛰기</a>
+
+<div id="app">
+
+  <!-- ===================== 타이틀 ===================== -->
+  <section id="screen-title" class="screen is-active" aria-labelledby="title-h">
+    <div class="title-bg" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="title-wrap">
+      <p class="eyebrow mono">통합 생존 분석기 v7.3 · 제7 수용구</p>
+      <h1 id="title-h">등급 판정</h1>
+      <p class="subtitle">분석기가 당신의 삶을 읽는다. 당신은 그 결과 위에서 선택한다.</p>
+
+      <div class="intro">
+        <p>기후 난민이 늘고 팬데믹이 번진 시대. 수용구의 모든 사람은 <b>분석기</b>가 매긴 <b>등급</b>으로 살아간다. 등급은 배급과 의료, 거주지, 그리고 <b>'재배치'</b>의 순서를 정한다.</p>
+        <p>12년을 버텨라. 시간은 쉬지 않고 흐르고, 선택은 당신의 몫이다. <em>당신이 고르지 않으면, 분석기가 대신 고를 것이다.</em></p>
+      </div>
+
+      <ul class="chips" aria-label="게임 특징">
+        <li><b>1년 = 1분</b> 배속 조절</li>
+        <li><b>확률 이벤트</b> 계절·등급·직무에 따라</li>
+        <li><b>6가지 직무</b> 직무마다 다른 선택지</li>
+        <li><b>11가지 엔딩</b> 그리고 되돌아보기</li>
+      </ul>
+
+      <div class="actions">
+        <button id="btn-new" class="btn primary">새로 시작</button>
+        <button id="btn-continue" class="btn" hidden>이어하기</button>
+        <button id="btn-help" class="btn ghost">게임 방법</button>
+      </div>
+      <p class="meta mono">발견한 엔딩 <b id="ending-count">0</b> / <span id="ending-total">11</span></p>
+      <p class="note">“AI가 인간을 분류·통제하는 것은 정당한가”라는 물음에서 출발한 시뮬레이션입니다.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 출신 선택 ===================== -->
+  <section id="screen-origin" class="screen" aria-labelledby="origin-h">
+    <div class="origin-wrap">
+      <h2 id="origin-h">당신은 어디에서 왔습니까?</h2>
+      <p class="muted">출신은 시작 상태를 정합니다. 분석기가 이 정보를 평가에 어떻게 쓰는지는 공개되어 있지 않습니다.</p>
+      <div id="origin-list" class="origin-list"></div>
+      <button id="btn-back-title" class="btn ghost">← 처음으로</button>
+    </div>
+  </section>
+
+  <!-- ===================== 게임 ===================== -->
+  <section id="screen-game" class="screen" aria-label="게임 화면">
+    <header class="hud">
+      <div class="hud-left">
+        <div class="brand"><span class="pulse-dot" aria-hidden="true"></span><span class="mono">ANALYZER v7.3</span></div>
+        <div class="idtag mono" id="hud-id">ID 7-0000</div>
+      </div>
+
+      <div class="clock" aria-live="off">
+        <div class="date" id="hud-date">2071년 3월</div>
+        <div class="sub mono"><span id="hud-age">27세</span> · <span id="hud-left-time">12년 남음</span></div>
+        <div class="progress" id="hud-progress-wrap" aria-hidden="true">
+          <i id="hud-progress"></i>
+          <u style="left:25%"></u><u style="left:50%"></u><u style="left:75%"></u>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="speed" role="group" aria-label="시간 배속">
+          <button data-speed="0" class="spd" aria-label="일시정지" title="일시정지 (Space)">❚❚</button>
+          <button data-speed="1" class="spd on">1×</button>
+          <button data-speed="2" class="spd">2×</button>
+          <button data-speed="4" class="spd">4×</button>
+          <button data-speed="8" class="spd">8×</button>
+        </div>
+        <button id="btn-mode" class="chip-btn" title="선택지가 떠 있는 동안 시간이 어떻게 흐를지 정합니다">
+          선택 중 <b id="mode-label">1배속</b>
+        </button>
+        <button id="btn-help2" class="icon-btn" aria-label="게임 방법">?</button>
+        <button id="btn-quit" class="icon-btn" aria-label="처음 화면으로" title="처음 화면으로">⌂</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- 상태 패널 -->
+      <aside class="panel status" aria-label="내 상태">
+        <div class="grade-card" id="gradeCard" data-grade="3">
+          <div class="g-num" id="g-num">3</div>
+          <div class="g-meta">
+            <div class="g-label mono">현재 등급</div>
+            <div class="g-name" id="g-name">임시 수용구</div>
+            <div class="g-desc" id="g-desc">컨테이너 수용 시설.</div>
+          </div>
+        </div>
+
+        <div class="gauge-wrap">
+          <div class="gauge-head"><span>분석기 점수 (추정)</span><span class="mono dim" id="gauge-q">±</span></div>
+          <div class="gauge" id="gauge" aria-hidden="true"></div>
+          <p class="tiny dim">정확한 점수와 기준선은 비공개입니다.</p>
+        </div>
+
+        <div class="role-card" id="roleCard">
+          <div class="role-head mono">직무</div>
+          <div class="role-name" id="role-name">없음</div>
+          <div class="role-desc" id="role-desc">직무 공고가 나면 지원할 수 있다.</div>
+        </div>
+
+        <div class="stats" id="stats" aria-label="능력치"></div>
+      </aside>
+
+      <!-- 무대 -->
+      <section class="stage" id="stage">
+        <div class="scene-wrap">
+          <svg id="scene" viewBox="0 0 800 330" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 반짝이는 점은 현재 나의 위치.">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0a0f16"/><stop offset=".62" stop-color="#18212d"/><stop offset="1" stop-color="#2d2f31"/>
+              </linearGradient>
+              <radialGradient id="sunGlow"><stop offset="0" stop-color="#ffa468" stop-opacity=".55"/><stop offset="1" stop-color="#ffa468" stop-opacity="0"/></radialGradient>
+              <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ad0c4" stop-opacity=".18"/><stop offset="1" stop-color="#5ad0c4" stop-opacity=".02"/></linearGradient>
+            </defs>
+            <rect width="800" height="330" fill="url(#sky)"/>
+            <circle cx="520" cy="120" r="96" fill="url(#sunGlow)"/>
+            <circle cx="520" cy="120" r="21" fill="#e88a5a" opacity=".55"/>
+            <g class="smog" aria-hidden="true">
+              <ellipse cx="180" cy="96" rx="240" ry="12" fill="#6e7885" opacity=".12"/>
+              <ellipse cx="560" cy="140" rx="280" ry="10" fill="#6e7885" opacity=".10"/>
+              <ellipse cx="400" cy="60" rx="320" ry="9" fill="#6e7885" opacity=".08"/>
+            </g>
+            <g fill="#101822" aria-hidden="true">
+              <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/><rect x="632" y="224" width="20" height="58"/>
+            </g>
+            <rect y="282" width="800" height="48" fill="#0b1016"/>
+            <path d="M0 282.5H800" stroke="#243142"/>
+
+            <!-- 1등급 돔 -->
+            <g id="z1">
+              <path d="M30 282A115 115 0 0 1 260 282Z" fill="url(#glass)" stroke="#5ad0c4" stroke-opacity=".65" stroke-width="1.4"/>
+              <path d="M145 167V282M92 190L145 282M198 190L145 282M60 232 145 282M230 232 145 282" stroke="#5ad0c4" stroke-opacity=".13" fill="none"/>
+              <g id="z1-bld" fill="#1b2836"></g>
+            </g>
+            <!-- 2등급 -->
+            <g id="z2"><g id="z2-bld"></g></g>
+            <!-- 3등급 -->
+            <g id="z3"><g id="z3-bld"></g></g>
+            <!-- 4등급 + 이송선 -->
+            <g id="z4">
+              <path d="M656 282V262h12v-8M656 262H790" stroke="#8a4a44" stroke-opacity=".55" fill="none" stroke-dasharray="3 3"/>
+              <g id="z4-fence" stroke="#6b3b37" stroke-opacity=".7"></g>
+              <g id="gantry" stroke="#3a4655" stroke-width="2" fill="none"><path d="M752 282V120M776 282V120M752 150H776M752 190H776M752 230H776"/></g>
+              <g id="ship">
+                <path d="M730 118C744 150 748 210 745 282H715C712 210 716 150 730 118Z" fill="#c8d1da"/>
+                <path d="M730 118C737 134 741 150 742 165H718C719 150 723 134 730 118Z" fill="#d9654f"/>
+                <path d="M715 262 702 282h13zM745 262l13 20h-13z" fill="#8995a3"/>
+                <circle cx="730" cy="188" r="5" fill="#0b1118" stroke="#8995a3"/>
+                <g id="exhaust" opacity="0"><path d="M720 282q10 40 20 0z" fill="#ffb26b"/><path d="M724 282q6 70 12 0z" fill="#ffe3a6"/></g>
+              </g>
+            </g>
+
+            <!-- 구역 라벨 -->
+            <g class="zlabels" font-size="10" fill="#8797aa" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
+              <text x="145" y="150">1 · 핵심 거주구</text>
+              <text x="362" y="218">2 · 일반 거주구</text>
+              <text x="552" y="212">3 · 임시 수용구</text>
+              <text x="690" y="100" >4 · 이송 대기구</text>
+            </g>
+
+            <!-- 해수면 -->
+            <rect id="water" x="0" y="318" width="800" height="40" fill="#2b6784" opacity=".55"/>
+            <path id="waterline" d="M0 318q25-4 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0" stroke="#7fc5e6" stroke-opacity=".5" fill="none"/>
+
+            <!-- 내 위치 -->
+            <g id="marker" style="transform:translate(360px,262px)">
+              <circle class="ring" r="9" fill="none" stroke="#f0b44c" stroke-width="1.6"/>
+              <circle r="4" fill="#f0b44c"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="world" id="world" aria-label="사회 지표"></div>
+
+        <div class="console" aria-live="off">
+          <div class="console-head mono">분석기 콘솔</div>
+          <div id="console-lines" class="console-lines mono"></div>
+        </div>
+
+        <!-- 이벤트 -->
+        <div id="event" class="event" hidden role="dialog" aria-modal="true" aria-labelledby="ev-title" tabindex="-1">
+          <div class="event-card" id="event-card">
+            <div class="ev-top">
+              <span class="ev-tag mono" id="ev-tag">이벤트</span>
+              <span class="ev-date mono" id="ev-date"></span>
+            </div>
+            <h2 id="ev-title">제목</h2>
+            <div class="ev-body" id="ev-body"></div>
+            <div class="ev-choices" id="ev-choices"></div>
+            <div class="ev-result" id="ev-result" hidden></div>
+            <div class="ev-timer" id="ev-timer">
+              <div class="bar"><i id="ev-timer-fill"></i></div>
+              <span class="mono" id="ev-timer-text"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 로그 -->
+      <aside class="panel logpanel" aria-label="기록">
+        <div class="log-head"><span>기록</span><span class="mono dim" id="log-count">0</span></div>
+        <ol id="log" class="log" aria-live="polite"></ol>
+      </aside>
+    </main>
+  </section>
+
+  <!-- ===================== 엔딩 ===================== -->
+  <section id="screen-end" class="screen" aria-labelledby="end-title">
+    <div class="end-wrap" id="end-wrap"></div>
+  </section>
+</div>
+
+<!-- 도움말 -->
+<dialog id="help" aria-labelledby="help-h">
+  <form method="dialog" class="help-card">
+    <h2 id="help-h">게임 방법</h2>
+    <ul class="help-list">
+      <li><b>시간</b> 게임 속 1년은 현실 1분입니다. 상단에서 1×~8× 배속과 일시정지를 고를 수 있습니다. 12년이 지나면 공청회가 열리고 이야기가 끝납니다.</li>
+      <li><b>이벤트</b> 계절, 연차, 등급, 능력치, 직무에 따라 확률적으로 사건이 일어납니다. 선택지를 고르면 능력치가 변합니다. 숫자 키 <kbd>1</kbd>~<kbd>6</kbd>으로도 고를 수 있습니다.</li>
+      <li><b>선택 중의 시간</b> 선택지가 떠 있는 동안에는 배속과 관계없이 <b>1배속</b>으로 흐르고, 제한 시간(40초) 안에 고르지 않으면 <b>분석기가 대신 결정</b>합니다. 상단의 ‘선택 중’ 버튼으로 <b>완전 정지</b>로 바꿀 수 있습니다.</li>
+      <li><b>능력치</b> 건강·식량·정신·유대·협조도. 건강이나 정신이 0이 되면 이야기가 끝납니다. 협조도는 분석기가 좋아하는 값입니다.</li>
+      <li><b>등급</b> 3년마다 분석기가 재분류합니다. 1등급(돔)~4등급(이송 대기구). 4등급이 이어지면 ‘재배치’ 호출이 옵니다. 평가 항목과 기준선의 일부는 공개되지 않습니다.</li>
+      <li><b>직무</b> 공고에서 직무를 얻으면 평가에 가점이 붙고, 직무 전용 이벤트와 선택지가 열립니다. 어떤 직무는 이웃의 삶과 직접 맞닿습니다.</li>
+      <li><b>엔딩</b> 끝나면 삶을 요약하고, 분석기가 말해 주지 않은 것과 함께 되돌아볼 수 있습니다.</li>
+    </ul>
+    <p class="tiny dim">단축키 · Space: 일시정지/계속 · 1~6: 선택 · +/−: 배속</p>
+    <div class="help-actions"><button class="btn primary" value="close">닫기</button></div>
+  </form>
+</dialog>
+
+<script src="js/engine.js"></script>
+<script src="js/events.js"></script>
+<script src="js/endings.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
