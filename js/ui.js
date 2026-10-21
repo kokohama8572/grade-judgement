@@ -506,7 +506,7 @@
       const a = hist[i], b = hist[i + 1];
       const w = x(b.t) - x(a.t);
       svg += `<rect x="${x(a.t)}" y="8" width="${Math.max(0, w)}" height="18" fill="${gc[a.grade]}" opacity=".85"/>`;
-      if (w > 18) svg += `<text x="${x(a.t) + w / 2}" y="21" text-anchor="middle" style="fill:#06101a;font-weight:700">${a.grade === 5 ? '–' : a.grade}</text>`;
+      if (w > 18) svg += `<text x="${x(a.t) + w / 2}" y="21" text-anchor="middle" style="fill:#f8f4ea;font-weight:700">${a.grade === 5 ? '–' : a.grade}</text>`;
     }
     svg += `<text x="${pl}" y="36" style="font-size:9px">등급 ▲</text>`;
     // grid
