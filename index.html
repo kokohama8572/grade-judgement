@@ -124,7 +124,7 @@
       <!-- 무대 -->
       <section class="stage" id="stage">
         <div class="scene-wrap">
-          <svg id="scene" viewBox="0 0 800 330" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 빨간 점은 현재 나의 위치.">
+          <svg id="scene" viewBox="0 0 800 400" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 빨간 점은 현재 나의 위치. 지하에는 1등급 전용 비축고, 분석기 서버실, 2구역까지만 이어진 급수관이 있고 지하수위가 차오른다.">
             <defs>
               <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#2a5590" stroke-opacity=".09"/></pattern>
               <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#1d1a15" stroke-opacity=".35" stroke-width="1"/></pattern>
@@ -132,10 +132,12 @@
               <radialGradient id="heat"><stop offset="0" stop-color="#d9733a" stop-opacity=".22"/><stop offset=".55" stop-color="#e09a55" stop-opacity=".08"/><stop offset="1" stop-color="#e09a55" stop-opacity="0"/></radialGradient>
               <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d98a4a" stop-opacity="0"/><stop offset="1" stop-color="#d98a4a" stop-opacity=".14"/></linearGradient>
               <filter id="rough" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="1.8"/></filter>
+              <pattern id="clay" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".8" fill="#1d1a15" fill-opacity=".3"/><circle cx="5.5" cy="5.5" r=".6" fill="#1d1a15" fill-opacity=".22"/></pattern>
+              <pattern id="rock" width="16" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L5 2L9 6L16 0M8 10l3-4" stroke="#1d1a15" stroke-opacity=".22" fill="none"/></pattern>
               <pattern id="waves" width="8" height="5" patternUnits="userSpaceOnUse"><path d="M0 2.5H8" stroke="#2a5590" stroke-opacity=".45"/></pattern>
             </defs>
-            <rect width="800" height="330" fill="#fbf8ef"/>
-            <rect width="800" height="330" fill="url(#grid)"/>
+            <rect width="800" height="400" fill="#fbf8ef"/>
+            <rect width="800" height="282" fill="url(#grid)"/>
             <rect x="0" y="170" width="800" height="112" fill="url(#haze)"/>
             <circle cx="520" cy="120" r="130" fill="url(#heat)"/>
             <circle cx="520" cy="120" r="34" fill="#b4261d" fill-opacity=".08" stroke="#b4261d" stroke-opacity=".5" stroke-dasharray="3 4"/>
@@ -150,7 +152,16 @@
               <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/>
             </g>
             <g stroke="#1d1a15" stroke-opacity=".22" stroke-dasharray="2 4" aria-hidden="true"><path d="M272 34V282M462 34V282M644 34V282"/></g>
-            <rect y="282" width="800" height="48" fill="url(#hatch)"/>
+            <!-- 지층 -->
+            <g aria-hidden="true">
+              <rect y="282" width="800" height="24" fill="url(#hatch)"/>
+              <path d="M0 306q100-5 200 0t200 0t200 0t200 0V352q-100 4-200 0t-200 0t-200 0t-200 0Z" fill="#f1e9d6"/>
+              <path d="M0 306q100-5 200 0t200 0t200 0t200 0V352q-100 4-200 0t-200 0t-200 0t-200 0Z" fill="url(#clay)"/>
+              <path d="M0 352q100 4 200 0t200 0t200 0t200 0V400H0Z" fill="#e7dec9"/>
+              <path d="M0 352q100 4 200 0t200 0t200 0t200 0V400H0Z" fill="url(#rock)"/>
+              <path d="M0 306q100-5 200 0t200 0t200 0t200 0M0 352q100 4 200 0t200 0t200 0t200 0" stroke="#1d1a15" stroke-opacity=".45" fill="none" stroke-dasharray="6 3"/>
+              <g font-size="7.5" fill="#6a6253" font-family="ui-monospace,Menlo,monospace"><text x="4" y="302">표토</text><text x="4" y="334">점토층</text><text x="4" y="396">암반</text></g>
+            </g>
             <path d="M0 282.5H800" stroke="#1d1a15" stroke-width="1.6"/>
 
             <!-- 1등급 돔 -->
@@ -229,17 +240,51 @@
               <text x="658" y="58">축척 1:2,000</text><text x="658" y="69">작성: 분석기</text>
               <text x="726" y="58">승인: —</text><text x="726" y="69">등급: 대외비</text>
             </g>
+            <!-- 지하 구조 -->
+            <g id="under" filter="url(#rough)" font-family="ui-monospace,Menlo,monospace">
+              <!-- 급수관: 2구역까지만 -->
+              <rect x="0" y="292" width="452" height="5" fill="#cfdbe8" stroke="#1d1a15" stroke-width=".9"/>
+              <path d="M452 289.5l8 5-8 5zM468 289.5l-8 5 8 5z" fill="#b4261d" stroke="#1d1a15" stroke-width=".8"/>
+              <path d="M460 294.5v-8M455 286.5h10" stroke="#1d1a15"/>
+              <path d="M468 294.5H790" stroke="#2a5590" stroke-opacity=".5" stroke-dasharray="2 4" stroke-width="2.5"/>
+              <path d="M332 292v-10M392 292v-10M420 292v-10" stroke="#1d1a15" stroke-width="1.6"/>
+              <!-- 지하 비축고 -->
+              <rect x="56" y="304" width="178" height="44" fill="#f6f1e6" stroke="#1d1a15" stroke-width="1.4"/>
+              <path d="M141 291v13M149 291v13M141 295h8M141 299h8M141 303h8" stroke="#1d1a15"/>
+              <path d="M62 326h166M62 342h166" stroke="#1d1a15" stroke-opacity=".7"/>
+              <g fill="#d9b98a" stroke="#1d1a15" stroke-width=".8"><rect x="66" y="318" width="10" height="8"/><rect x="78" y="320" width="8" height="6"/><rect x="88" y="318" width="10" height="8"/><rect x="100" y="320" width="8" height="6"/><rect x="160" y="318" width="10" height="8"/><rect x="172" y="320" width="8" height="6"/><rect x="182" y="318" width="10" height="8"/><rect x="194" y="318" width="10" height="8"/><rect x="66" y="334" width="10" height="8"/><rect x="78" y="334" width="10" height="8"/><rect x="90" y="336" width="8" height="6"/><rect x="164" y="334" width="10" height="8"/><rect x="176" y="336" width="8" height="6"/><rect x="186" y="334" width="10" height="8"/><rect x="206" y="334" width="10" height="8"/><rect x="218" y="336" width="8" height="6"/></g>
+              <text x="110" y="314" font-size="7.5" fill="#1d1a15" font-weight="700">지하 비축고</text><text x="168" y="314" font-size="7" fill="#b4261d">1등급 전용</text>
+              <!-- 분석기 서버실 -->
+              <rect x="306" y="320" width="132" height="44" fill="#f6f1e6" stroke="#1d1a15" stroke-width="1.4"/>
+              <text x="312" y="330" font-size="7.5" fill="#1d1a15" font-weight="700">분석기 서버실</text><text x="372" y="330" font-size="7" fill="#1f6560">냉각 최우선</text>
+              <g fill="#e2dac7" stroke="#1d1a15" stroke-width=".9"><rect x="314" y="334" width="14" height="26"/><rect x="334" y="334" width="14" height="26"/><rect x="354" y="334" width="14" height="26"/><rect x="374" y="334" width="14" height="26"/><rect x="394" y="334" width="14" height="26"/><rect x="414" y="334" width="14" height="26"/></g>
+              <g stroke="#1d1a15" stroke-opacity=".45"><path d="M316 340h10M316 345h10M316 350h10M316 355h10M336 340h10M336 345h10M336 350h10M336 355h10M356 340h10M356 345h10M356 350h10M356 355h10M376 340h10M376 345h10M376 350h10M376 355h10M396 340h10M396 345h10M396 350h10M396 355h10M416 340h10M416 345h10M416 350h10M416 355h10"/></g>
+              <g fill="#1f6560"><circle cx="325" cy="338" r="1" class="win"/><circle cx="345" cy="338" r="1"/><circle cx="365" cy="338" r="1" class="win"/><circle cx="385" cy="338" r="1"/><circle cx="405" cy="338" r="1" class="win"/><circle cx="425" cy="338" r="1"/></g>
+              <circle cx="345" cy="343" r="1" fill="#b4261d" class="win"/><circle cx="405" cy="348" r="1" fill="#b4261d"/>
+              <!-- 냉각관: 돔 → 서버실 -->
+              <path d="M234 330H306" stroke="#1f6560" stroke-width="2" stroke-opacity=".6"/>
+              <!-- 판독 데이터선: 감시탑 → 서버실 -->
+              <path d="M640 282V344H438" stroke="#b4261d" stroke-width="1.2" stroke-dasharray="4 2" fill="none"/>
+              <text x="548" y="340" font-size="7" fill="#b4261d" text-anchor="middle">판독 데이터 → 서버실</text>
+              <!-- 이송선 발사대 기초 -->
+              <rect x="696" y="282" width="68" height="30" fill="#e2dac7" stroke="#1d1a15" stroke-width="1.2"/>
+              <rect x="696" y="282" width="68" height="30" fill="url(#hatch)"/>
+              <path d="M704 312v14M756 312v14M730 312v18" stroke="#1d1a15" stroke-width="1.4"/>
+              <rect x="470" y="298" width="80" height="11" fill="#fbf8ef" stroke="#b4261d" stroke-width=".7"/><text x="474" y="306" font-size="7" fill="#b4261d">3·4구역 급수 제한 →</text>
+            </g>
+            <!-- 축척 -->
             <g aria-hidden="true">
-              <rect x="292" y="294" width="122" height="20" fill="#fbf8ef" stroke="#1d1a15"/>
-              <path d="M300 306h50M350 306h50" stroke="#1d1a15" stroke-width="3"/><path d="M350 306h50" stroke="#fbf8ef" stroke-width="1.6"/>
-              <text x="300" y="302" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">0</text>
-              <text x="346" y="302" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">50</text>
-              <text x="392" y="302" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">100m</text>
+              <rect x="672" y="372" width="120" height="22" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M680 386h50M730 386h50" stroke="#1d1a15" stroke-width="3"/><path d="M730 386h50" stroke="#fbf8ef" stroke-width="1.6"/>
+              <text x="680" y="382" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">0</text>
+              <text x="726" y="382" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">50</text>
+              <text x="770" y="382" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">100m</text>
             </g>
 
-            <!-- 해수면 -->
-            <rect id="water" x="0" y="318" width="800" height="40" fill="#2a5590" fill-opacity=".1"/>
-            <rect x="0" y="0" width="800" height="40" fill="url(#waves)" transform="translate(0 318)" id="waterhatch"/>
+            <!-- 지하수위 (해수면 상승) -->
+            <rect id="water" x="0" y="318" width="800" height="120" fill="#2a5590" fill-opacity=".1"/>
+            <rect x="0" y="0" width="800" height="120" fill="url(#waves)" fill-opacity=".8" transform="translate(0 318)" id="waterhatch"/>
+            <text id="waterlabel" x="520" y="0" font-size="7.5" fill="#2a5590" font-family="ui-monospace,Menlo,monospace" transform="translate(0 318)">▽ 지하수위 (해수면 연동)</text>
             <path id="waterline" d="M0 318q25-4 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0" stroke="#2a5590" stroke-width="1.4" fill="none"/>
 
             <!-- 내 위치 -->

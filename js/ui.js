@@ -139,10 +139,11 @@
     $('#marker').style.transform = `translate(${x}px,${y}px)`;
   }
   function updateWater(t) {
-    const y = Math.max(300, 322 - t * 1.5);
+    const y = Math.max(320, 392 - t * 5.5);
     $('#water').setAttribute('y', y);
     $('#waterline').setAttribute('transform', `translate(0 ${y - 318})`);
     $('#waterhatch').setAttribute('transform', `translate(0 ${y})`);
+    $('#waterlabel').setAttribute('transform', `translate(0 ${y - 3})`);
   }
   function launchShip() {
     const ship = $('#ship');
