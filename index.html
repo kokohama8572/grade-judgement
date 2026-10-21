@@ -141,8 +141,9 @@
               <path d="M80 62q160-8 320 0t320 0"/>
             </g>
             <g fill="#e2dac7" stroke="#1d1a15" stroke-opacity=".35" aria-hidden="true">
-              <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/><rect x="632" y="224" width="20" height="58"/>
+              <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/>
             </g>
+            <g stroke="#1d1a15" stroke-opacity=".22" stroke-dasharray="2 4" aria-hidden="true"><path d="M272 34V282M462 34V282M644 34V282"/></g>
             <rect y="282" width="800" height="48" fill="url(#hatch)"/>
             <path d="M0 282.5H800" stroke="#1d1a15" stroke-width="1.6"/>
 
@@ -151,31 +152,63 @@
               <path d="M30 282A115 115 0 0 1 260 282Z" fill="#1f6560" fill-opacity=".07" stroke="#1f6560" stroke-width="1.6"/>
               <path d="M145 167V282M92 190L145 282M198 190L145 282M60 232 145 282M230 232 145 282" stroke="#1f6560" stroke-opacity=".25" fill="none"/>
               <g id="z1-bld" fill="#f4efe3" stroke="#1d1a15" stroke-width="1"></g>
+              <rect x="26" y="282" width="238" height="9" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M40 291v8M80 291v8M120 291v8M170 291v8M210 291v8M250 291v8" stroke="#1d1a15" stroke-width="1.4"/>
+              <path d="M136 167h18M145 160v7" stroke="#1d1a15"/><circle cx="145" cy="158" r="2" fill="#b4261d" class="win"/>
             </g>
             <!-- 2등급 -->
             <g id="z2"><g id="z2-bld"></g></g>
             <!-- 3등급 -->
             <g id="z3"><g id="z3-bld"></g></g>
+            <!-- 사람들 -->
+            <g id="people" stroke="#1d1a15" stroke-width="1" fill="none" stroke-linecap="round"></g>
+            <!-- 분석기 감시탑 -->
+            <g id="tower">
+              <path id="beam" d="M640 146L586 282H612Z" fill="#b4261d" fill-opacity=".1" stroke="#b4261d" stroke-opacity=".35" stroke-dasharray="2 3"/>
+              <path d="M635 282L638 150M645 282L642 150M636 262l8-14M644 262l-8-14M636.5 234l7-14M643.5 234l-7-14M637 206l6-14M643 206l-6-14M637.5 178l5-14" stroke="#1d1a15" fill="none"/>
+              <rect x="632" y="138" width="16" height="10" fill="#fbf8ef" stroke="#1d1a15"/>
+              <circle cx="640" cy="143" r="2.6" fill="#b4261d" class="win"/>
+              <path d="M640 138v-10M636 128h8" stroke="#1d1a15"/>
+            </g>
             <!-- 4등급 + 이송선 -->
             <g id="z4">
               <path d="M656 282V262h12v-8M656 262H790" stroke="#b4261d" stroke-opacity=".6" fill="none" stroke-dasharray="3 3"/>
               <g id="z4-fence" stroke="#b4261d" stroke-opacity=".75"></g>
+              <path d="M660 262l3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3" stroke="#b4261d" stroke-opacity=".75" fill="none"/>
               <g id="gantry" stroke="#1d1a15" stroke-width="1.6" fill="none"><path d="M752 282V120M776 282V120M752 150H776M752 190H776M752 230H776M752 150L776 190M752 190L776 230M752 230L776 270"/></g>
               <g id="ship" stroke="#1d1a15" stroke-width="1.3">
                 <path d="M730 118C744 150 748 210 745 282H715C712 210 716 150 730 118Z" fill="#fbf8ef"/>
                 <path d="M730 118C737 134 741 150 742 165H718C719 150 723 134 730 118Z" fill="#b4261d" fill-opacity=".85"/>
                 <path d="M715 262 702 282h13zM745 262l13 20h-13z" fill="#d8cfbb"/>
                 <circle cx="730" cy="188" r="5" fill="#fbf8ef"/>
+                <path d="M716 230H744M716.5 240H743.5" stroke-opacity=".5"/>
+                <text x="730" y="214" text-anchor="middle" font-size="9" fill="#1d1a15" stroke="none" font-family="ui-monospace,Menlo,monospace" font-weight="700">07</text>
                 <g id="exhaust" opacity="0" stroke="none"><path d="M720 282q10 40 20 0z" fill="#e0893a"/><path d="M724 282q6 70 12 0z" fill="#f2c46b"/></g>
               </g>
             </g>
 
-            <!-- 구역 라벨 -->
-            <g class="zlabels" font-size="10.5" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
-              <text x="145" y="150">1 · 핵심 거주구</text>
-              <text x="362" y="218">2 · 일반 거주구</text>
-              <text x="552" y="212">3 · 임시 수용구</text>
-              <text x="690" y="100" >4 · 이송 대기구</text>
+            <!-- 구역 표제 -->
+            <g class="zlabels" font-size="10" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">
+              <rect x="0" y="0" width="800" height="22" fill="#f4efe3"/>
+              <path d="M0 22.5H800M272 0V22M462 0V22M644 0V22" stroke="#1d1a15"/>
+              <rect x="10" y="7" width="8" height="8" fill="#1f6560"/><text x="24" y="15">1 · 핵심 거주구 (돔)</text>
+              <rect x="282" y="7" width="8" height="8" fill="#2a5590"/><text x="296" y="15">2 · 일반 거주구</text>
+              <rect x="472" y="7" width="8" height="8" fill="#9c6412"/><text x="486" y="15">3 · 임시 수용구</text>
+              <rect x="654" y="7" width="8" height="8" fill="#b4261d"/><text x="668" y="15">4 · 이송 대기구</text>
+            </g>
+            <g font-family="ui-monospace,Menlo,monospace" font-size="8" fill="#3b362d" aria-hidden="true">
+              <rect x="652" y="34" width="138" height="40" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M652 48H790M720 48V74" stroke="#1d1a15" stroke-opacity=".5"/>
+              <text x="658" y="44" font-weight="700" fill="#1d1a15">도면 7-A · 수용구 단면</text>
+              <text x="658" y="58">축척 1:2,000</text><text x="658" y="69">작성: 분석기</text>
+              <text x="726" y="58">승인: —</text><text x="726" y="69">등급: 대외비</text>
+            </g>
+            <g aria-hidden="true">
+              <rect x="292" y="294" width="122" height="20" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M300 306h50M350 306h50" stroke="#1d1a15" stroke-width="3"/><path d="M350 306h50" stroke="#fbf8ef" stroke-width="1.6"/>
+              <text x="300" y="302" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">0</text>
+              <text x="346" y="302" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">50</text>
+              <text x="392" y="302" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">100m</text>
             </g>
 
             <!-- 해수면 -->

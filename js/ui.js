@@ -77,6 +77,7 @@
     z1.innerHTML = '';
     [[68, 208, 18, 74], [96, 186, 22, 96], [131, 164, 26, 118], [168, 198, 20, 84], [196, 224, 22, 58]].forEach(([x, y, w, h]) => {
       z1.appendChild(svgEl('rect', { x, y, width: w, height: h }));
+      z1.appendChild(svgEl('path', { d: `M${x + w / 2} ${y}v-6`, fill: 'none' }));
       for (let yy = y + 6; yy < 278; yy += 9) for (let xx = x + 4; xx < x + w - 3; xx += 6) {
         if (Math.random() < 0.55) z1.appendChild(svgEl('rect', { x: xx, y: yy, width: 3, height: 4, fill: '#1f6560', stroke: 'none', opacity: rnd(0.45, 0.9), class: Math.random() < 0.12 ? 'win' : '' }));
       }
@@ -90,6 +91,7 @@
       z2.appendChild(svgEl('path', { d: `M${x - 2} ${y}L${x + 11} ${y - 10}L${x + 24} ${y}Z`, fill: '#d8cfbb', stroke: '#1d1a15' }));
       z2.appendChild(svgEl('rect', { x: x + 6, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.8, class: i % 2 ? 'win' : '' }));
       z2.appendChild(svgEl('rect', { x: x + 13, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.5 }));
+      z2.appendChild(svgEl('rect', { x: x + 8, y: 274, width: 6, height: 8, fill: '#d8cfbb', stroke: '#1d1a15' }));
     }
     // 3 컨테이너
     const z3 = $('#z3-bld');
@@ -102,6 +104,19 @@
       z3.appendChild(svgEl('path', { d: `M${x + 4} ${y + 2}V${y + 15}M${x + 10} ${y + 2}V${y + 15}M${x + 16} ${y + 2}V${y + 15}`, stroke: '#1d1a1555', fill: 'none' }));
       if (Math.random() < 0.5) z3.appendChild(svgEl('rect', { x: x + 24, y: y + 5, width: 5, height: 4, fill: '#1d1a15', opacity: 0.55, class: 'win' }));
     }
+    // 사람들 (4구역은 이송선 쪽으로 줄을 선다)
+    const ppl = $('#people');
+    ppl.innerHTML = '';
+    const person = (x, alpha = 1) => {
+      const g = svgEl('g', { opacity: alpha });
+      g.appendChild(svgEl('path', { d: `M${x} 282l1.6-5.5l1.6 5.5M${x + 1.6} 276.5v-5M${x - 0.6} 273.5h4.4` }));
+      g.appendChild(svgEl('circle', { cx: x + 1.6, cy: 269.2, r: 1.8, fill: '#1d1a15', stroke: 'none' }));
+      ppl.appendChild(g);
+    };
+    [96, 220].forEach((x) => person(x, 0.7));
+    [300, 352, 412].forEach((x) => person(x));
+    [470, 492, 540, 600, 614].forEach((x) => person(x));
+    for (let x = 664; x <= 704; x += 6.5) person(x);
     // 4 울타리
     const f = $('#z4-fence');
     f.innerHTML = '';

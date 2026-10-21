@@ -263,11 +263,14 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
 .scene-cap { position: absolute; left: 12px; right: 12px; bottom: 6px; font-family: var(--mono); font-size: 11px; color: var(--dim); display: flex; justify-content: space-between; gap: 10px; white-space: nowrap; overflow: hidden; }
 #scene { display: block; width: 100%; height: auto; max-height: 100%; border: 1px solid var(--rule2); }
 #screen-game.paused .scene-wrap::after {
-  content: "일시정지"; position: absolute; top: 18px; right: 18px; z-index: 3;
+  content: "일시정지"; position: absolute; top: 15%; left: 22px; z-index: 3;
   font-family: var(--serif); font-weight: 900; font-size: 15px; letter-spacing: .25em; color: var(--red);
-  border: 2.5px solid var(--red); background: rgba(255,250,240,.82); padding: 2px 8px 2px 12px; transform: rotate(6deg);
+  border: 2.5px solid var(--red); background: rgba(255,250,240,.82); padding: 2px 8px 2px 12px; transform: rotate(-6deg);
 }
 #screen-game.paused #scene .smog path, #screen-game.paused #marker .ring { animation-play-state: paused; }
+#beam { transform-box: view-box; transform-origin: 640px 146px; animation: sweep 7s ease-in-out infinite alternate; }
+@keyframes sweep { from { transform: rotate(-14deg); } to { transform: rotate(22deg); } }
+#screen-game.paused #beam { animation-play-state: paused; }
 #marker { transition: transform 1.4s cubic-bezier(.5,0,.2,1); }
 #marker .ring { transform-box: fill-box; transform-origin: center; animation: ring 1.8s ease-out infinite; }
 @keyframes ring { from { transform: scale(.7); opacity: 1; } to { transform: scale(2.4); opacity: 0; } }
