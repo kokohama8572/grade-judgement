@@ -137,6 +137,8 @@
       d.innerHTML = `<div class="stat-top"><span class="nm">${name}${sub ? `<small>${sub}</small>` : ''}</span><span class="val mono">0</span></div><div class="bar"><i style="--c:var(${cv})"></i></div>`;
       wrap.appendChild(d);
     });
+    $('#hud-vitals').innerHTML = STAT_ORDER.map(([k, name, cv]) =>
+      `<div class="hv" data-k="${k}"><span>${name}</span><div class="bar"><i style="--c:var(${cv})"></i></div></div>`).join('');
     const g = $('#gauge');
     g.innerHTML = '';
     for (let i = 0; i < 10; i++) g.appendChild(document.createElement('i'));
@@ -148,7 +150,11 @@
       const node = $(`.stat[data-k="${k}"]`);
       node.querySelector('.bar i').style.width = `${v}%`;
       node.querySelector('.val').textContent = v;
-      node.classList.toggle('low', v < 25 && (k === 'health' || k === 'food' || k === 'mind'));
+      const low = v < 25 && (k === 'health' || k === 'food' || k === 'mind');
+      node.classList.toggle('low', low);
+      const hv = $(`.hv[data-k="${k}"]`);
+      hv.querySelector('i').style.width = `${v}%`;
+      hv.classList.toggle('low', low);
       if (prevStats[k] != null && prevStats[k] !== v) {
         const d = v - prevStats[k];
         const pop = document.createElement('span');
@@ -169,6 +175,22 @@
     $('#g-name').textContent = Game.GRADES[g].name;
     $('#g-desc').textContent = Game.GRADES[g].desc;
     moveMarker(g);
+    syncReview(s);
+  }
+
+  function syncReview(s) {
+    const box = $('#next-review');
+    let text, cls = '';
+    if (s.grade === 5) text = '분석기 평가 대상 아님';
+    else if (s.transferAt != null) { text = '⚠ 재배치 호출 예정'; cls = 'bad'; }
+    else {
+      const next = (Math.floor(s.t / C.REVIEW_EVERY) + 1) * C.REVIEW_EVERY;
+      const m = Math.max(0, Math.ceil((next - s.t) * 12 - 1e-6));
+      text = next >= C.YEARS ? `공청회까지 ${m}개월` : `다음 재분류까지 ${m}개월`;
+      if (m <= 3) cls = 'warn';
+    }
+    if (box.textContent !== text) box.textContent = text;
+    box.className = `next-review mono ${cls}`;
   }
 
   function syncGauge(s) {
@@ -223,7 +245,7 @@
     d.textContent = text;
     if (cls) d.className = cls;
     box.appendChild(d);
-    while (box.children.length > 7) box.firstChild.remove();
+    while (box.children.length > 16) box.firstChild.remove();
   }
 
   function ambient(s) {
@@ -251,7 +273,7 @@
 
   function renderLogItem(e, atTop = true) {
     const li = document.createElement('li');
-    li.className = e.type;
+    li.className = `log-${e.type}`;
     li.innerHTML = `<span class="d">${esc(e.date)}</span>${esc(e.text)}`;
     const ol = $('#log');
     if (atTop) ol.prepend(li); else ol.appendChild(li);
@@ -363,6 +385,7 @@
   function setSpeed(v) {
     speed = v;
     $$('.spd').forEach((b) => b.classList.toggle('on', Number(b.dataset.speed) === v));
+    $('#screen-game').classList.toggle('paused', v === 0);
   }
   function setMode(m) {
     mode = m;

@@ -7,6 +7,7 @@
   <meta name="description" content="기후 난민과 팬데믹 공포 속에서 AI '분석기'가 매긴 등급에 따라 12년을 살아가는 시뮬레이션 게임.">
   <meta name="theme-color" content="#080b10">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23080b10'/%3E%3Cpath d='M8 22V10h8a5 5 0 0 1 0 10h-3' fill='none' stroke='%235ad0c4' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -71,6 +72,8 @@
         </div>
       </div>
 
+      <div class="hud-vitals" id="hud-vitals" aria-hidden="true"></div>
+
       <div class="hud-right">
         <div class="speed" role="group" aria-label="시간 배속">
           <button data-speed="0" class="spd" aria-label="일시정지" title="일시정지 (Space)">❚❚</button>
@@ -98,6 +101,7 @@
             <div class="g-desc" id="g-desc">컨테이너 수용 시설.</div>
           </div>
         </div>
+        <div class="next-review mono" id="next-review"></div>
 
         <div class="gauge-wrap">
           <div class="gauge-head"><span>분석기 점수 (추정)</span><span class="mono dim" id="gauge-q">±</span></div>

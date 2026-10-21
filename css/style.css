@@ -30,7 +30,7 @@
   --g4: #ee6b5c;
   --g5: #8797aa;
 
-  --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  --font: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --r: 10px;
 }
@@ -148,6 +148,7 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
 .progress i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 2px; background: linear-gradient(90deg, var(--teal), var(--amber)); }
 .progress u { position: absolute; top: -2px; width: 1px; height: 8px; background: var(--line2); }
 
+.hud-vitals { display: none; }
 .hud-right { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex-wrap: wrap; }
 .speed { display: inline-flex; border: 1px solid var(--line2); border-radius: 8px; overflow: hidden; }
 .spd { background: var(--panel); border: 0; padding: 7px 12px; font-family: var(--mono); font-size: 13px; color: var(--dim); border-right: 1px solid var(--line); }
@@ -176,6 +177,11 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
 .g-label { font-size: 10px; color: var(--faint); letter-spacing: .12em; }
 .g-name { font-weight: 700; font-size: 16px; }
 .g-desc { font-size: 12px; color: var(--dim); line-height: 1.4; }
+.next-review { font-size: 11px; color: var(--dim); letter-spacing: .04em; margin-top: -6px; padding-left: 2px; }
+.next-review::before { content: "◷ "; color: var(--faint); }
+.next-review.warn { color: var(--amber); }
+.next-review.bad { color: var(--red); animation: blink 1.2s infinite; }
+.next-review.bad::before { content: ""; }
 .grade-card.flash { animation: gflash 1.1s ease; }
 @keyframes gflash { 0% { box-shadow: 0 0 0 0 var(--gc); } 30% { box-shadow: 0 0 0 4px var(--gc); } 100% { box-shadow: 0 0 0 0 transparent; } }
 
@@ -209,7 +215,10 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
 
 /* 무대 */
 .stage { position: relative; display: flex; flex-direction: column; gap: 10px; min-height: 0; min-width: 0; border-radius: var(--r); }
-.scene-wrap { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: #0a0f16; flex: 0 1 auto; max-height: 52%; }
+.scene-wrap { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: #0a0f16; flex: 0 1 auto; max-height: 62%; }
+.scene-wrap { position: relative; }
+#screen-game.paused .scene-wrap::after { content: "❚❚ 일시정지"; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--amber); border: 1px solid rgba(240,180,76,.45); background: rgba(10,14,20,.85); padding: 3px 10px; border-radius: 999px; }
+#screen-game.paused #scene .smog ellipse, #screen-game.paused #marker .ring { animation-play-state: paused; }
 #scene { display: block; width: 100%; height: auto; max-height: 100%; }
 #marker { transition: transform 1.4s cubic-bezier(.5,0,.2,1); }
 #marker .ring { transform-box: fill-box; transform-origin: center; animation: ring 1.8s ease-out infinite; }
@@ -229,15 +238,18 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
 .wchip b { color: var(--text); font-family: var(--mono); font-weight: 600; margin-left: 4px; }
 .wchip.hot b { color: var(--red); } .wchip.warm b { color: var(--amber); }
 
-.console { flex: 1 1 0; min-height: 90px; background: #0a0e14; border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; overflow: hidden; display: flex; flex-direction: column; }
+.console { flex: 1 1 0; min-height: 90px; background: #0a0e14 repeating-linear-gradient(0deg, rgba(90,208,196,.025) 0 1px, transparent 1px 22px); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; overflow: hidden; display: flex; flex-direction: column; }
 .console-head { font-size: 10px; color: var(--teal); letter-spacing: .14em; margin-bottom: 6px; }
 .console-lines { font-size: 12px; color: var(--dim); display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; flex: 1; overflow: hidden; }
 .console-lines div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: fadein .6s both; }
 .console-lines div.warn { color: var(--amber); } .console-lines div.bad { color: var(--red); }
+.console-lines div:last-child { color: var(--text); }
+.console-lines div:last-child::after { content: "▍"; color: var(--teal); margin-left: 4px; animation: blink 1s steps(1) infinite; }
 
 /* 이벤트 */
 .event { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 10px; background: rgba(5, 8, 12, .8); backdrop-filter: blur(3px); border-radius: var(--r); overflow-y: auto; }
 .event[hidden] { display: none; }
+.event:focus { outline: none; }
 .event-card { width: min(720px, 100%); max-height: 100%; overflow-y: auto; background: var(--panel); border: 1px solid var(--line2); border-left: 3px solid var(--teal); border-radius: var(--r); padding: 20px 22px 14px; box-shadow: 0 20px 60px rgba(0,0,0,.5); animation: rise .35s ease both; scrollbar-width: thin; }
 @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .event-card.sys { border-left-color: var(--amber); }
@@ -290,10 +302,10 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
 .log li { font-size: 13px; line-height: 1.45; padding-left: 14px; position: relative; color: var(--dim); animation: fadein .4s both; }
 .log li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--faint); }
 .log li .d { display: block; font-family: var(--mono); font-size: 10px; color: var(--faint); }
-.log li.grade { color: var(--text); } .log li.grade::before { background: var(--amber); }
-.log li.event::before { background: var(--teal); }
-.log li.warn { color: #e4c58a; } .log li.warn::before { background: var(--red); }
-.log li.sys::before { background: var(--line2); }
+.log li.log-grade { color: var(--text); } .log li.log-grade::before { background: var(--amber); }
+.log li.log-event::before { background: var(--teal); }
+.log li.log-warn { color: #e4c58a; } .log li.log-warn::before { background: var(--red); }
+.log li.log-sys::before { background: var(--line2); }
 
 /* 도움말 */
 dialog { border: 1px solid var(--line2); border-radius: 12px; background: var(--panel); color: var(--text); padding: 0; max-width: min(640px, calc(100vw - 24px)); width: 100%; }
@@ -356,7 +368,12 @@ textarea.memo:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
 }
 @media (max-width: 980px) {
   #screen-game.is-active { display: block; height: auto; overflow: visible; min-height: 100dvh; }
-  .hud { grid-template-columns: 1fr; gap: 8px; padding: 8px 12px; }
+  .hud { grid-template-columns: 1fr; gap: 8px; padding: 8px 12px; position: sticky; top: 0; z-index: 30; background: rgba(10,14,20,.94); backdrop-filter: blur(8px); }
+  .hud-vitals { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .hv { display: grid; gap: 3px; font-size: 11px; color: var(--dim); }
+  .hv .bar { height: 5px; }
+  .hv.low span { color: var(--red); }
+  .hv.low .bar i { animation: blink 1s infinite; }
   .hud-left { display: none; }
   .clock { display: flex; align-items: center; gap: 12px; text-align: left; min-width: 0; flex-wrap: wrap; }
   .clock .date { font-size: 18px; } .clock .sub { margin: 0; }
@@ -382,9 +399,12 @@ textarea.memo:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
   .end-sec { padding: 16px; }
   .spd { padding: 7px 9px; }
   .hud-right { gap: 6px; }
-  .speed { flex: 1 1 100%; }
-  .spd { flex: 1; }
-  .chip-btn { flex: 1; text-align: left; }
+  .hud-right { flex-wrap: nowrap; }
+  .speed { flex: 1 1 auto; }
+  .spd { flex: 1; padding: 6px 0; }
+  .chip-btn { flex: 0 0 auto; padding: 6px 8px; white-space: nowrap; }
+  .icon-btn { flex: 0 0 auto; }
+  .clock .progress { margin-top: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
