@@ -268,6 +268,9 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border: 1px s
   border: 2.5px solid var(--red); background: rgba(255,250,240,.82); padding: 2px 8px 2px 12px; transform: rotate(-6deg);
 }
 #screen-game.paused #scene .smog path, #screen-game.paused #marker .ring { animation-play-state: paused; }
+#drone { animation: patrol 38s linear infinite; }
+@keyframes patrol { from { transform: translateX(-30px); } to { transform: translateX(830px); } }
+#screen-game.paused #drone { animation-play-state: paused; }
 #beam { transform-box: view-box; transform-origin: 640px 146px; animation: sweep 7s ease-in-out infinite alternate; }
 @keyframes sweep { from { transform: rotate(-14deg); } to { transform: rotate(22deg); } }
 #screen-game.paused #beam { animation-play-state: paused; }

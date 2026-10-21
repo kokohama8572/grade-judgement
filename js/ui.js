@@ -72,12 +72,20 @@
   /* ---------------- 장면(SVG) ---------------- */
   function buildScene() {
     const rnd = (a, b) => a + Math.random() * (b - a);
-    // 1 돔
+    // 1 돔 (뒷줄은 옅게)
+    const back = $('#z1-back');
+    back.innerHTML = '';
+    [[56, 236, 14, 46], [82, 214, 14, 68], [118, 196, 12, 86], [156, 206, 12, 76], [186, 222, 12, 60], [214, 238, 14, 44]].forEach(([x, y, w, h]) => {
+      back.appendChild(svgEl('rect', { x, y, width: w, height: h }));
+      for (let yy = y + 5; yy < 278; yy += 8) back.appendChild(svgEl('path', { d: `M${x + 3} ${yy}h${w - 6}`, 'stroke-dasharray': '2 2', 'stroke-opacity': 0.5 }));
+    });
     const z1 = $('#z1-bld');
     z1.innerHTML = '';
     [[68, 208, 18, 74], [96, 186, 22, 96], [131, 164, 26, 118], [168, 198, 20, 84], [196, 224, 22, 58]].forEach(([x, y, w, h]) => {
       z1.appendChild(svgEl('rect', { x, y, width: w, height: h }));
       z1.appendChild(svgEl('path', { d: `M${x + w / 2} ${y}v-6`, fill: 'none' }));
+      z1.appendChild(svgEl('rect', { x: x + w * 0.68, y: y + 0.5, width: w * 0.32 - 0.5, height: h - 1, fill: 'url(#shade)', stroke: 'none' }));
+      z1.appendChild(svgEl('path', { d: `M${x - 1} ${y}h${w + 2}`, fill: 'none', 'stroke-width': 2 }));
       for (let yy = y + 6; yy < 278; yy += 9) for (let xx = x + 4; xx < x + w - 3; xx += 6) {
         if (Math.random() < 0.55) z1.appendChild(svgEl('rect', { x: xx, y: yy, width: 3, height: 4, fill: '#1f6560', stroke: 'none', opacity: rnd(0.45, 0.9), class: Math.random() < 0.12 ? 'win' : '' }));
       }
@@ -88,6 +96,7 @@
     for (let i = 0; i < 6; i++) {
       const x = 288 + i * 26, h = 30 + (i % 3) * 6, y = 282 - h;
       z2.appendChild(svgEl('rect', { x, y, width: 22, height: h, fill: '#f4efe3', stroke: '#1d1a15' }));
+      z2.appendChild(svgEl('rect', { x: x + 15, y: y + 0.5, width: 6.5, height: h - 1, fill: 'url(#shade)' }));
       z2.appendChild(svgEl('path', { d: `M${x - 2} ${y}L${x + 11} ${y - 10}L${x + 24} ${y}Z`, fill: '#d8cfbb', stroke: '#1d1a15' }));
       z2.appendChild(svgEl('rect', { x: x + 6, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.8, class: i % 2 ? 'win' : '' }));
       z2.appendChild(svgEl('rect', { x: x + 13, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.5 }));
@@ -101,6 +110,7 @@
       if (r === 2 && c % 2) continue;
       const x = 478 + c * 37 + (r === 1 ? 6 : 0), y = 282 - 18 * (r + 1);
       z3.appendChild(svgEl('rect', { x, y, width: 34, height: 17, fill: cc[(r * 4 + c) % cc.length], stroke: '#1d1a15' }));
+      z3.appendChild(svgEl('rect', { x: x + 0.5, y: y + 12, width: 33, height: 4.5, fill: 'url(#shade)' }));
       z3.appendChild(svgEl('path', { d: `M${x + 4} ${y + 2}V${y + 15}M${x + 10} ${y + 2}V${y + 15}M${x + 16} ${y + 2}V${y + 15}`, stroke: '#1d1a1555', fill: 'none' }));
       if (Math.random() < 0.5) z3.appendChild(svgEl('rect', { x: x + 24, y: y + 5, width: 5, height: 4, fill: '#1d1a15', opacity: 0.55, class: 'win' }));
     }
