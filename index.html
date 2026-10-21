@@ -124,33 +124,33 @@
       <!-- 무대 -->
       <section class="stage" id="stage">
         <div class="scene-wrap">
-          <svg id="scene" viewBox="0 0 800 330" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 반짝이는 점은 현재 나의 위치.">
+          <svg id="scene" viewBox="0 0 800 330" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 빨간 점은 현재 나의 위치.">
             <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#0a0f16"/><stop offset=".62" stop-color="#18212d"/><stop offset="1" stop-color="#2d2f31"/>
-              </linearGradient>
-              <radialGradient id="sunGlow"><stop offset="0" stop-color="#ffa468" stop-opacity=".55"/><stop offset="1" stop-color="#ffa468" stop-opacity="0"/></radialGradient>
-              <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ad0c4" stop-opacity=".18"/><stop offset="1" stop-color="#5ad0c4" stop-opacity=".02"/></linearGradient>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#2a5590" stroke-opacity=".09"/></pattern>
+              <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#1d1a15" stroke-opacity=".35" stroke-width="1"/></pattern>
+              <pattern id="waves" width="8" height="5" patternUnits="userSpaceOnUse"><path d="M0 2.5H8" stroke="#2a5590" stroke-opacity=".45"/></pattern>
             </defs>
-            <rect width="800" height="330" fill="url(#sky)"/>
-            <circle cx="520" cy="120" r="96" fill="url(#sunGlow)"/>
-            <circle cx="520" cy="120" r="21" fill="#e88a5a" opacity=".55"/>
-            <g class="smog" aria-hidden="true">
-              <ellipse cx="180" cy="96" rx="240" ry="12" fill="#6e7885" opacity=".12"/>
-              <ellipse cx="560" cy="140" rx="280" ry="10" fill="#6e7885" opacity=".10"/>
-              <ellipse cx="400" cy="60" rx="320" ry="9" fill="#6e7885" opacity=".08"/>
+            <rect width="800" height="330" fill="#fbf8ef"/>
+            <rect width="800" height="330" fill="url(#grid)"/>
+            <circle cx="520" cy="120" r="34" fill="#b4261d" fill-opacity=".08" stroke="#b4261d" stroke-opacity=".5" stroke-dasharray="3 4"/>
+            <circle cx="520" cy="120" r="18" fill="#b4261d" fill-opacity=".14" stroke="#b4261d" stroke-opacity=".7"/>
+            <text x="520" y="172" text-anchor="middle" font-size="9" fill="#b4261d" fill-opacity=".75" font-family="ui-monospace,Menlo,monospace">지표 온도 +3.1℃</text>
+            <g class="smog" aria-hidden="true" fill="none" stroke="#6a6253" stroke-opacity=".28" stroke-dasharray="14 6">
+              <path d="M-40 96q120-10 240 0t240 0"/>
+              <path d="M300 142q140-8 280 0t280 0"/>
+              <path d="M80 62q160-8 320 0t320 0"/>
             </g>
-            <g fill="#101822" aria-hidden="true">
+            <g fill="#e2dac7" stroke="#1d1a15" stroke-opacity=".35" aria-hidden="true">
               <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/><rect x="632" y="224" width="20" height="58"/>
             </g>
-            <rect y="282" width="800" height="48" fill="#0b1016"/>
-            <path d="M0 282.5H800" stroke="#243142"/>
+            <rect y="282" width="800" height="48" fill="url(#hatch)"/>
+            <path d="M0 282.5H800" stroke="#1d1a15" stroke-width="1.6"/>
 
             <!-- 1등급 돔 -->
             <g id="z1">
-              <path d="M30 282A115 115 0 0 1 260 282Z" fill="url(#glass)" stroke="#5ad0c4" stroke-opacity=".65" stroke-width="1.4"/>
-              <path d="M145 167V282M92 190L145 282M198 190L145 282M60 232 145 282M230 232 145 282" stroke="#5ad0c4" stroke-opacity=".13" fill="none"/>
-              <g id="z1-bld" fill="#1b2836"></g>
+              <path d="M30 282A115 115 0 0 1 260 282Z" fill="#1f6560" fill-opacity=".07" stroke="#1f6560" stroke-width="1.6"/>
+              <path d="M145 167V282M92 190L145 282M198 190L145 282M60 232 145 282M230 232 145 282" stroke="#1f6560" stroke-opacity=".25" fill="none"/>
+              <g id="z1-bld" fill="#f4efe3" stroke="#1d1a15" stroke-width="1"></g>
             </g>
             <!-- 2등급 -->
             <g id="z2"><g id="z2-bld"></g></g>
@@ -158,20 +158,20 @@
             <g id="z3"><g id="z3-bld"></g></g>
             <!-- 4등급 + 이송선 -->
             <g id="z4">
-              <path d="M656 282V262h12v-8M656 262H790" stroke="#8a4a44" stroke-opacity=".55" fill="none" stroke-dasharray="3 3"/>
-              <g id="z4-fence" stroke="#6b3b37" stroke-opacity=".7"></g>
-              <g id="gantry" stroke="#3a4655" stroke-width="2" fill="none"><path d="M752 282V120M776 282V120M752 150H776M752 190H776M752 230H776"/></g>
-              <g id="ship">
-                <path d="M730 118C744 150 748 210 745 282H715C712 210 716 150 730 118Z" fill="#c8d1da"/>
-                <path d="M730 118C737 134 741 150 742 165H718C719 150 723 134 730 118Z" fill="#d9654f"/>
-                <path d="M715 262 702 282h13zM745 262l13 20h-13z" fill="#8995a3"/>
-                <circle cx="730" cy="188" r="5" fill="#0b1118" stroke="#8995a3"/>
-                <g id="exhaust" opacity="0"><path d="M720 282q10 40 20 0z" fill="#ffb26b"/><path d="M724 282q6 70 12 0z" fill="#ffe3a6"/></g>
+              <path d="M656 282V262h12v-8M656 262H790" stroke="#b4261d" stroke-opacity=".6" fill="none" stroke-dasharray="3 3"/>
+              <g id="z4-fence" stroke="#b4261d" stroke-opacity=".75"></g>
+              <g id="gantry" stroke="#1d1a15" stroke-width="1.6" fill="none"><path d="M752 282V120M776 282V120M752 150H776M752 190H776M752 230H776M752 150L776 190M752 190L776 230M752 230L776 270"/></g>
+              <g id="ship" stroke="#1d1a15" stroke-width="1.3">
+                <path d="M730 118C744 150 748 210 745 282H715C712 210 716 150 730 118Z" fill="#fbf8ef"/>
+                <path d="M730 118C737 134 741 150 742 165H718C719 150 723 134 730 118Z" fill="#b4261d" fill-opacity=".85"/>
+                <path d="M715 262 702 282h13zM745 262l13 20h-13z" fill="#d8cfbb"/>
+                <circle cx="730" cy="188" r="5" fill="#fbf8ef"/>
+                <g id="exhaust" opacity="0" stroke="none"><path d="M720 282q10 40 20 0z" fill="#e0893a"/><path d="M724 282q6 70 12 0z" fill="#f2c46b"/></g>
               </g>
             </g>
 
             <!-- 구역 라벨 -->
-            <g class="zlabels" font-size="10" fill="#8797aa" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
+            <g class="zlabels" font-size="10.5" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
               <text x="145" y="150">1 · 핵심 거주구</text>
               <text x="362" y="218">2 · 일반 거주구</text>
               <text x="552" y="212">3 · 임시 수용구</text>
@@ -179,16 +179,17 @@
             </g>
 
             <!-- 해수면 -->
-            <rect id="water" x="0" y="318" width="800" height="40" fill="#2b6784" opacity=".55"/>
-            <path id="waterline" d="M0 318q25-4 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0" stroke="#7fc5e6" stroke-opacity=".5" fill="none"/>
+            <rect id="water" x="0" y="318" width="800" height="40" fill="#2a5590" fill-opacity=".1"/>
+            <rect x="0" y="0" width="800" height="40" fill="url(#waves)" transform="translate(0 318)" id="waterhatch"/>
+            <path id="waterline" d="M0 318q25-4 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0" stroke="#2a5590" stroke-width="1.4" fill="none"/>
 
             <!-- 내 위치 -->
             <g id="marker" style="transform:translate(360px,262px)">
-              <circle class="ring" r="9" fill="none" stroke="#f0b44c" stroke-width="1.6"/>
-              <circle r="4" fill="#f0b44c"/>
+              <circle class="ring" r="9" fill="none" stroke="#b4261d" stroke-width="1.6"/>
+              <circle r="4" fill="#b4261d"/>
             </g>
           </svg>
-          <div class="scene-cap"><span>첨부 1 · 제7 수용구 단면 (위성 판독)</span><span>● 표시: 본인 위치</span></div>
+          <div class="scene-cap"><span>첨부 1 · 제7 수용구 단면도</span><span style="color:#b4261d">● 본인 위치</span></div>
         </div>
 
         <div class="world" id="world" aria-label="사회 지표"></div>

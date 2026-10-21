@@ -78,7 +78,7 @@
     [[68, 208, 18, 74], [96, 186, 22, 96], [131, 164, 26, 118], [168, 198, 20, 84], [196, 224, 22, 58]].forEach(([x, y, w, h]) => {
       z1.appendChild(svgEl('rect', { x, y, width: w, height: h }));
       for (let yy = y + 6; yy < 278; yy += 9) for (let xx = x + 4; xx < x + w - 3; xx += 6) {
-        if (Math.random() < 0.55) z1.appendChild(svgEl('rect', { x: xx, y: yy, width: 3, height: 4, fill: '#5ad0c4', opacity: rnd(0.5, 0.95), class: Math.random() < 0.12 ? 'win' : '' }));
+        if (Math.random() < 0.55) z1.appendChild(svgEl('rect', { x: xx, y: yy, width: 3, height: 4, fill: '#1f6560', stroke: 'none', opacity: rnd(0.45, 0.9), class: Math.random() < 0.12 ? 'win' : '' }));
       }
     });
     // 2 거주구
@@ -86,21 +86,21 @@
     z2.innerHTML = '';
     for (let i = 0; i < 6; i++) {
       const x = 288 + i * 26, h = 30 + (i % 3) * 6, y = 282 - h;
-      z2.appendChild(svgEl('rect', { x, y, width: 22, height: h, fill: '#222e3b' }));
-      z2.appendChild(svgEl('path', { d: `M${x - 2} ${y}L${x + 11} ${y - 10}L${x + 24} ${y}Z`, fill: '#2d3b4b' }));
-      z2.appendChild(svgEl('rect', { x: x + 6, y: y + 8, width: 4, height: 5, fill: '#f0b44c', opacity: 0.8, class: i % 2 ? 'win' : '' }));
-      z2.appendChild(svgEl('rect', { x: x + 13, y: y + 8, width: 4, height: 5, fill: '#f0b44c', opacity: 0.5 }));
+      z2.appendChild(svgEl('rect', { x, y, width: 22, height: h, fill: '#f4efe3', stroke: '#1d1a15' }));
+      z2.appendChild(svgEl('path', { d: `M${x - 2} ${y}L${x + 11} ${y - 10}L${x + 24} ${y}Z`, fill: '#d8cfbb', stroke: '#1d1a15' }));
+      z2.appendChild(svgEl('rect', { x: x + 6, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.8, class: i % 2 ? 'win' : '' }));
+      z2.appendChild(svgEl('rect', { x: x + 13, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.5 }));
     }
     // 3 컨테이너
     const z3 = $('#z3-bld');
     z3.innerHTML = '';
-    const cc = ['#4d4036', '#37485a', '#5b3d36', '#3d4e44', '#51493a'];
+    const cc = ['#d9b98a', '#b9c6cf', '#d8a99a', '#bccbb6', '#e0cf9c'];
     for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) {
       if (r === 2 && c % 2) continue;
       const x = 478 + c * 37 + (r === 1 ? 6 : 0), y = 282 - 18 * (r + 1);
-      z3.appendChild(svgEl('rect', { x, y, width: 34, height: 17, fill: cc[(r * 4 + c) % cc.length] }));
-      z3.appendChild(svgEl('path', { d: `M${x + 4} ${y + 2}V${y + 15}M${x + 10} ${y + 2}V${y + 15}M${x + 16} ${y + 2}V${y + 15}`, stroke: '#00000040', fill: 'none' }));
-      if (Math.random() < 0.5) z3.appendChild(svgEl('rect', { x: x + 24, y: y + 5, width: 5, height: 4, fill: '#f0b44c', opacity: 0.7, class: 'win' }));
+      z3.appendChild(svgEl('rect', { x, y, width: 34, height: 17, fill: cc[(r * 4 + c) % cc.length], stroke: '#1d1a15' }));
+      z3.appendChild(svgEl('path', { d: `M${x + 4} ${y + 2}V${y + 15}M${x + 10} ${y + 2}V${y + 15}M${x + 16} ${y + 2}V${y + 15}`, stroke: '#1d1a1555', fill: 'none' }));
+      if (Math.random() < 0.5) z3.appendChild(svgEl('rect', { x: x + 24, y: y + 5, width: 5, height: 4, fill: '#1d1a15', opacity: 0.55, class: 'win' }));
     }
     // 4 울타리
     const f = $('#z4-fence');
@@ -117,6 +117,7 @@
     const y = Math.max(300, 322 - t * 1.5);
     $('#water').setAttribute('y', y);
     $('#waterline').setAttribute('transform', `translate(0 ${y - 318})`);
+    $('#waterhatch').setAttribute('transform', `translate(0 ${y})`);
   }
   function launchShip() {
     const ship = $('#ship');
