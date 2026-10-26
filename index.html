@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>등급 판정 — 분석기 시뮬레이션</title>
   <meta name="description" content="기후 난민과 팬데믹 공포 속에서 AI '분석기'가 매긴 등급에 따라 12년을 살아가는 시뮬레이션 게임.">
-  <meta name="theme-color" content="#080b10">
+  <meta name="theme-color" content="#ebe4d3">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23080b10'/%3E%3Cpath d='M8 22V10h8a5 5 0 0 1 0 10h-3' fill='none' stroke='%235ad0c4' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -71,6 +75,8 @@
         </div>
       </div>
 
+      <div class="hud-vitals" id="hud-vitals" aria-hidden="true"></div>
+
       <div class="hud-right">
         <div class="speed" role="group" aria-label="시간 배속">
           <button data-speed="0" class="spd" aria-label="일시정지" title="일시정지 (Space)">❚❚</button>
@@ -98,6 +104,7 @@
             <div class="g-desc" id="g-desc">컨테이너 수용 시설.</div>
           </div>
         </div>
+        <div class="next-review mono" id="next-review"></div>
 
         <div class="gauge-wrap">
           <div class="gauge-head"><span>분석기 점수 (추정)</span><span class="mono dim" id="gauge-q">±</span></div>
@@ -117,76 +124,182 @@
       <!-- 무대 -->
       <section class="stage" id="stage">
         <div class="scene-wrap">
-          <svg id="scene" viewBox="0 0 800 330" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 반짝이는 점은 현재 나의 위치.">
+          <svg id="scene" viewBox="0 0 800 400" role="img" aria-label="도시 단면도. 왼쪽부터 1등급 돔, 2등급 거주구, 3등급 임시 수용구, 4등급 이송 대기구. 빨간 점은 현재 나의 위치. 지하에는 1등급 전용 비축고, 분석기 서버실, 2구역까지만 이어진 급수관이 있고 지하수위가 차오른다.">
             <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#0a0f16"/><stop offset=".62" stop-color="#18212d"/><stop offset="1" stop-color="#2d2f31"/>
-              </linearGradient>
-              <radialGradient id="sunGlow"><stop offset="0" stop-color="#ffa468" stop-opacity=".55"/><stop offset="1" stop-color="#ffa468" stop-opacity="0"/></radialGradient>
-              <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ad0c4" stop-opacity=".18"/><stop offset="1" stop-color="#5ad0c4" stop-opacity=".02"/></linearGradient>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#2a5590" stroke-opacity=".09"/></pattern>
+              <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#1d1a15" stroke-opacity=".35" stroke-width="1"/></pattern>
+              <pattern id="shade" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-50)"><path d="M0 0V3" stroke="#1d1a15" stroke-opacity=".5" stroke-width=".8"/></pattern>
+              <radialGradient id="heat"><stop offset="0" stop-color="#d9733a" stop-opacity=".22"/><stop offset=".55" stop-color="#e09a55" stop-opacity=".08"/><stop offset="1" stop-color="#e09a55" stop-opacity="0"/></radialGradient>
+              <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d98a4a" stop-opacity="0"/><stop offset="1" stop-color="#d98a4a" stop-opacity=".14"/></linearGradient>
+              <filter id="rough" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="1.8"/></filter>
+              <pattern id="clay" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".8" fill="#1d1a15" fill-opacity=".3"/><circle cx="5.5" cy="5.5" r=".6" fill="#1d1a15" fill-opacity=".22"/></pattern>
+              <pattern id="rock" width="16" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L5 2L9 6L16 0M8 10l3-4" stroke="#1d1a15" stroke-opacity=".22" fill="none"/></pattern>
+              <pattern id="waves" width="8" height="5" patternUnits="userSpaceOnUse"><path d="M0 2.5H8" stroke="#2a5590" stroke-opacity=".45"/></pattern>
             </defs>
-            <rect width="800" height="330" fill="url(#sky)"/>
-            <circle cx="520" cy="120" r="96" fill="url(#sunGlow)"/>
-            <circle cx="520" cy="120" r="21" fill="#e88a5a" opacity=".55"/>
-            <g class="smog" aria-hidden="true">
-              <ellipse cx="180" cy="96" rx="240" ry="12" fill="#6e7885" opacity=".12"/>
-              <ellipse cx="560" cy="140" rx="280" ry="10" fill="#6e7885" opacity=".10"/>
-              <ellipse cx="400" cy="60" rx="320" ry="9" fill="#6e7885" opacity=".08"/>
+            <rect width="800" height="400" fill="#fbf8ef"/>
+            <rect width="800" height="282" fill="url(#grid)"/>
+            <rect x="0" y="170" width="800" height="112" fill="url(#haze)"/>
+            <circle cx="520" cy="120" r="130" fill="url(#heat)"/>
+            <circle cx="520" cy="120" r="34" fill="#b4261d" fill-opacity=".08" stroke="#b4261d" stroke-opacity=".5" stroke-dasharray="3 4"/>
+            <circle cx="520" cy="120" r="18" fill="#b4261d" fill-opacity=".14" stroke="#b4261d" stroke-opacity=".7"/>
+            <text x="520" y="172" text-anchor="middle" font-size="9" fill="#b4261d" fill-opacity=".75" font-family="ui-monospace,Menlo,monospace">지표 온도 +3.1℃</text>
+            <g class="smog" aria-hidden="true" fill="none" stroke="#6a6253" stroke-opacity=".28" stroke-dasharray="14 6">
+              <path d="M-40 96q120-10 240 0t240 0"/>
+              <path d="M300 142q140-8 280 0t280 0"/>
+              <path d="M80 62q160-8 320 0t320 0"/>
             </g>
-            <g fill="#101822" aria-hidden="true">
-              <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/><rect x="632" y="224" width="20" height="58"/>
+            <g fill="#e2dac7" stroke="#1d1a15" stroke-opacity=".35" aria-hidden="true">
+              <rect x="0" y="236" width="40" height="46"/><rect x="262" y="226" width="22" height="56"/><rect x="440" y="232" width="26" height="50"/>
             </g>
-            <rect y="282" width="800" height="48" fill="#0b1016"/>
-            <path d="M0 282.5H800" stroke="#243142"/>
+            <g stroke="#1d1a15" stroke-opacity=".22" stroke-dasharray="2 4" aria-hidden="true"><path d="M272 34V282M462 34V282M644 34V282"/></g>
+            <!-- 지층 -->
+            <g aria-hidden="true">
+              <rect y="282" width="800" height="24" fill="url(#hatch)"/>
+              <path d="M0 306q100-5 200 0t200 0t200 0t200 0V352q-100 4-200 0t-200 0t-200 0t-200 0Z" fill="#f1e9d6"/>
+              <path d="M0 306q100-5 200 0t200 0t200 0t200 0V352q-100 4-200 0t-200 0t-200 0t-200 0Z" fill="url(#clay)"/>
+              <path d="M0 352q100 4 200 0t200 0t200 0t200 0V400H0Z" fill="#e7dec9"/>
+              <path d="M0 352q100 4 200 0t200 0t200 0t200 0V400H0Z" fill="url(#rock)"/>
+              <path d="M0 306q100-5 200 0t200 0t200 0t200 0M0 352q100 4 200 0t200 0t200 0t200 0" stroke="#1d1a15" stroke-opacity=".45" fill="none" stroke-dasharray="6 3"/>
+              <g font-size="7.5" fill="#6a6253" font-family="ui-monospace,Menlo,monospace"><text x="4" y="302">표토</text><text x="4" y="334">점토층</text><text x="4" y="396">암반</text></g>
+            </g>
+            <path d="M0 282.5H800" stroke="#1d1a15" stroke-width="1.6"/>
 
             <!-- 1등급 돔 -->
-            <g id="z1">
-              <path d="M30 282A115 115 0 0 1 260 282Z" fill="url(#glass)" stroke="#5ad0c4" stroke-opacity=".65" stroke-width="1.4"/>
-              <path d="M145 167V282M92 190L145 282M198 190L145 282M60 232 145 282M230 232 145 282" stroke="#5ad0c4" stroke-opacity=".13" fill="none"/>
-              <g id="z1-bld" fill="#1b2836"></g>
+            <g id="z1" filter="url(#rough)">
+              <path d="M30 282A115 115 0 0 1 260 282Z" fill="#1f6560" fill-opacity=".07" stroke="#1f6560" stroke-width="1.6"/>
+              <path d="M145 167V282M92 190L145 282M198 190L145 282M60 232 145 282M230 232 145 282" stroke="#1f6560" stroke-opacity=".25" fill="none"/>
+              <g id="z1-back" fill="#e8e1d0" stroke="#1d1a15" stroke-opacity=".4"></g>
+              <g id="z1-bld" fill="#f4efe3" stroke="#1d1a15" stroke-width="1"></g>
+              <rect x="26" y="282" width="238" height="9" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M40 291v8M80 291v8M120 291v8M170 291v8M210 291v8M250 291v8" stroke="#1d1a15" stroke-width="1.4"/>
+              <path d="M136 167h18M145 160v7" stroke="#1d1a15"/><circle cx="145" cy="158" r="2" fill="#b4261d" class="win"/>
             </g>
             <!-- 2등급 -->
-            <g id="z2"><g id="z2-bld"></g></g>
+            <g id="z2" filter="url(#rough)"><g id="z2-bld"></g></g>
             <!-- 3등급 -->
-            <g id="z3"><g id="z3-bld"></g></g>
+            <g id="z3" filter="url(#rough)"><g id="z3-bld"></g>
+              <g stroke="#1d1a15" fill="#e4dccb"><path d="M527 246l3-9M543 246l-3-9M527 246l16-9M543 246l-16-9" fill="none"/><rect x="524" y="224" width="22" height="13" rx="2"/><rect x="545" y="224" width="2" height="13" fill="url(#shade)" stroke="none"/><path d="M524 228h22" stroke-opacity=".4"/></g>
+            </g>
+            <!-- 사람들 -->
+            <g id="people" stroke="#1d1a15" stroke-width="1" fill="none" stroke-linecap="round"></g>
+            <!-- 분석기 감시탑 -->
+            <g id="tower" filter="url(#rough)">
+              <path id="beam" d="M640 146L586 282H612Z" fill="#b4261d" fill-opacity=".1" stroke="#b4261d" stroke-opacity=".35" stroke-dasharray="2 3"/>
+              <path d="M635 282L638 150M645 282L642 150M636 262l8-14M644 262l-8-14M636.5 234l7-14M643.5 234l-7-14M637 206l6-14M643 206l-6-14M637.5 178l5-14" stroke="#1d1a15" fill="none"/>
+              <rect x="632" y="138" width="16" height="10" fill="#fbf8ef" stroke="#1d1a15"/>
+              <circle cx="640" cy="143" r="2.6" fill="#b4261d" class="win"/>
+              <path d="M640 138v-10M636 128h8" stroke="#1d1a15"/>
+            </g>
             <!-- 4등급 + 이송선 -->
-            <g id="z4">
-              <path d="M656 282V262h12v-8M656 262H790" stroke="#8a4a44" stroke-opacity=".55" fill="none" stroke-dasharray="3 3"/>
-              <g id="z4-fence" stroke="#6b3b37" stroke-opacity=".7"></g>
-              <g id="gantry" stroke="#3a4655" stroke-width="2" fill="none"><path d="M752 282V120M776 282V120M752 150H776M752 190H776M752 230H776"/></g>
-              <g id="ship">
-                <path d="M730 118C744 150 748 210 745 282H715C712 210 716 150 730 118Z" fill="#c8d1da"/>
-                <path d="M730 118C737 134 741 150 742 165H718C719 150 723 134 730 118Z" fill="#d9654f"/>
-                <path d="M715 262 702 282h13zM745 262l13 20h-13z" fill="#8995a3"/>
-                <circle cx="730" cy="188" r="5" fill="#0b1118" stroke="#8995a3"/>
-                <g id="exhaust" opacity="0"><path d="M720 282q10 40 20 0z" fill="#ffb26b"/><path d="M724 282q6 70 12 0z" fill="#ffe3a6"/></g>
+            <g id="z4" filter="url(#rough)">
+              <path d="M656 282V262h12v-8M656 262H790" stroke="#b4261d" stroke-opacity=".6" fill="none" stroke-dasharray="3 3"/>
+              <g id="z4-fence" stroke="#b4261d" stroke-opacity=".75"></g>
+              <path d="M660 262l3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3 3.5-3 3.5 3" stroke="#b4261d" stroke-opacity=".75" fill="none"/>
+              <g id="gantry" stroke="#1d1a15" stroke-width="1.6" fill="none"><path d="M752 282V120M776 282V120M752 150H776M752 190H776M752 230H776M752 150L776 190M752 190L776 230M752 230L776 270"/></g>
+              <g id="ship" stroke="#1d1a15" stroke-width="1.3">
+                <path d="M730 118C744 150 748 210 745 282H715C712 210 716 150 730 118Z" fill="#fbf8ef"/>
+                <path d="M730 118C737 134 741 150 742 165H718C719 150 723 134 730 118Z" fill="#b4261d" fill-opacity=".85"/>
+                <path d="M715 262 702 282h13zM745 262l13 20h-13z" fill="#d8cfbb"/>
+                <circle cx="730" cy="188" r="5" fill="#fbf8ef"/>
+                <path d="M716 230H744M716.5 240H743.5" stroke-opacity=".5"/>
+                <text x="730" y="214" text-anchor="middle" font-size="9" fill="#1d1a15" stroke="none" font-family="ui-monospace,Menlo,monospace" font-weight="700">07</text>
+                <g id="exhaust" opacity="0" stroke="none"><path d="M720 282q10 40 20 0z" fill="#e0893a"/><path d="M724 282q6 70 12 0z" fill="#f2c46b"/></g>
               </g>
             </g>
 
-            <!-- 구역 라벨 -->
-            <g class="zlabels" font-size="10" fill="#8797aa" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
-              <text x="145" y="150">1 · 핵심 거주구</text>
-              <text x="362" y="218">2 · 일반 거주구</text>
-              <text x="552" y="212">3 · 임시 수용구</text>
-              <text x="690" y="100" >4 · 이송 대기구</text>
+            <!-- 순찰 드론 -->
+            <g id="drone" aria-hidden="true"><g stroke="#1d1a15" fill="#f4efe3">
+              <path d="M-8 60h16M-11 57h6M5 57h6" fill="none"/><rect x="-4" y="58" width="8" height="4"/><circle cx="0" cy="63.5" r="1.4" fill="#b4261d" stroke="none" class="win"/>
+              <path d="M0 64L-9 92M0 64L9 92" stroke="#b4261d" stroke-opacity=".35" stroke-dasharray="1.5 2.5" fill="none"/>
+            </g></g>
+            <!-- 도면 주석 -->
+            <g class="callouts" font-family="ui-monospace,Menlo,monospace" font-size="8.5" fill="#1d1a15" aria-hidden="true">
+              <g fill="none" stroke="#1d1a15" stroke-width=".8"><path d="M78 196L56 66H40"/><path d="M638 128L600 66H582"/><path d="M730 124L712 96H700"/></g>
+              <g fill="#1d1a15"><circle cx="78" cy="196" r="1.6"/><circle cx="638" cy="128" r="1.6"/><circle cx="730" cy="124" r="1.6"/></g>
+              <g fill="#fbf8ef" stroke="#1d1a15"><circle cx="34" cy="66" r="6"/><circle cx="576" cy="66" r="6"/><circle cx="694" cy="96" r="6"/></g>
+              <text x="34" y="69" text-anchor="middle" font-size="8" font-weight="700">1</text>
+              <text x="576" y="69" text-anchor="middle" font-size="8" font-weight="700">2</text>
+              <text x="694" y="99" text-anchor="middle" font-size="8" font-weight="700">3</text>
+              <text x="44" y="60">기후 돔 · 내부 22.0℃</text>
+              <text x="566" y="56" text-anchor="end">분석기 감시탑</text><text x="566" y="66" text-anchor="end" fill="#6a6253">24시간 판독</text>
+              <text x="686" y="94" text-anchor="end">이송선 07호</text><text x="686" y="104" text-anchor="end" fill="#b4261d">목적지: 비공개</text>
+            </g>
+            <!-- 구역 표제 -->
+            <g class="zlabels" font-size="10" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">
+              <rect x="0" y="0" width="800" height="22" fill="#f4efe3"/>
+              <path d="M0 22.5H800M272 0V22M462 0V22M644 0V22" stroke="#1d1a15"/>
+              <rect x="10" y="7" width="8" height="8" fill="#1f6560"/><text x="24" y="15">1 · 핵심 거주구 (돔)</text>
+              <rect x="282" y="7" width="8" height="8" fill="#2a5590"/><text x="296" y="15">2 · 일반 거주구</text>
+              <rect x="472" y="7" width="8" height="8" fill="#9c6412"/><text x="486" y="15">3 · 임시 수용구</text>
+              <rect x="654" y="7" width="8" height="8" fill="#b4261d"/><text x="668" y="15">4 · 이송 대기구</text>
+            </g>
+            <g font-family="ui-monospace,Menlo,monospace" font-size="8" fill="#3b362d" aria-hidden="true">
+              <rect x="652" y="34" width="138" height="40" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M652 48H790M720 48V74" stroke="#1d1a15" stroke-opacity=".5"/>
+              <text x="658" y="44" font-weight="700" fill="#1d1a15">도면 7-A · 수용구 단면</text>
+              <text x="658" y="58">축척 1:2,000</text><text x="658" y="69">작성: 분석기</text>
+              <text x="726" y="58">승인: —</text><text x="726" y="69">등급: 대외비</text>
+            </g>
+            <!-- 지하 구조 -->
+            <g id="under" filter="url(#rough)" font-family="ui-monospace,Menlo,monospace">
+              <!-- 급수관: 2구역까지만 -->
+              <rect x="0" y="292" width="452" height="5" fill="#cfdbe8" stroke="#1d1a15" stroke-width=".9"/>
+              <path d="M452 289.5l8 5-8 5zM468 289.5l-8 5 8 5z" fill="#b4261d" stroke="#1d1a15" stroke-width=".8"/>
+              <path d="M460 294.5v-8M455 286.5h10" stroke="#1d1a15"/>
+              <path d="M468 294.5H790" stroke="#2a5590" stroke-opacity=".5" stroke-dasharray="2 4" stroke-width="2.5"/>
+              <path d="M332 292v-10M392 292v-10M420 292v-10" stroke="#1d1a15" stroke-width="1.6"/>
+              <!-- 지하 비축고 -->
+              <rect x="56" y="304" width="178" height="44" fill="#f6f1e6" stroke="#1d1a15" stroke-width="1.4"/>
+              <path d="M141 291v13M149 291v13M141 295h8M141 299h8M141 303h8" stroke="#1d1a15"/>
+              <path d="M62 326h166M62 342h166" stroke="#1d1a15" stroke-opacity=".7"/>
+              <g fill="#d9b98a" stroke="#1d1a15" stroke-width=".8"><rect x="66" y="318" width="10" height="8"/><rect x="78" y="320" width="8" height="6"/><rect x="88" y="318" width="10" height="8"/><rect x="100" y="320" width="8" height="6"/><rect x="160" y="318" width="10" height="8"/><rect x="172" y="320" width="8" height="6"/><rect x="182" y="318" width="10" height="8"/><rect x="194" y="318" width="10" height="8"/><rect x="66" y="334" width="10" height="8"/><rect x="78" y="334" width="10" height="8"/><rect x="90" y="336" width="8" height="6"/><rect x="164" y="334" width="10" height="8"/><rect x="176" y="336" width="8" height="6"/><rect x="186" y="334" width="10" height="8"/><rect x="206" y="334" width="10" height="8"/><rect x="218" y="336" width="8" height="6"/></g>
+              <text x="110" y="314" font-size="7.5" fill="#1d1a15" font-weight="700">지하 비축고</text><text x="168" y="314" font-size="7" fill="#b4261d">1등급 전용</text>
+              <!-- 분석기 서버실 -->
+              <rect x="306" y="320" width="132" height="44" fill="#f6f1e6" stroke="#1d1a15" stroke-width="1.4"/>
+              <text x="312" y="330" font-size="7.5" fill="#1d1a15" font-weight="700">분석기 서버실</text><text x="372" y="330" font-size="7" fill="#1f6560">냉각 최우선</text>
+              <g fill="#e2dac7" stroke="#1d1a15" stroke-width=".9"><rect x="314" y="334" width="14" height="26"/><rect x="334" y="334" width="14" height="26"/><rect x="354" y="334" width="14" height="26"/><rect x="374" y="334" width="14" height="26"/><rect x="394" y="334" width="14" height="26"/><rect x="414" y="334" width="14" height="26"/></g>
+              <g stroke="#1d1a15" stroke-opacity=".45"><path d="M316 340h10M316 345h10M316 350h10M316 355h10M336 340h10M336 345h10M336 350h10M336 355h10M356 340h10M356 345h10M356 350h10M356 355h10M376 340h10M376 345h10M376 350h10M376 355h10M396 340h10M396 345h10M396 350h10M396 355h10M416 340h10M416 345h10M416 350h10M416 355h10"/></g>
+              <g fill="#1f6560"><circle cx="325" cy="338" r="1" class="win"/><circle cx="345" cy="338" r="1"/><circle cx="365" cy="338" r="1" class="win"/><circle cx="385" cy="338" r="1"/><circle cx="405" cy="338" r="1" class="win"/><circle cx="425" cy="338" r="1"/></g>
+              <circle cx="345" cy="343" r="1" fill="#b4261d" class="win"/><circle cx="405" cy="348" r="1" fill="#b4261d"/>
+              <!-- 냉각관: 돔 → 서버실 -->
+              <path d="M234 330H306" stroke="#1f6560" stroke-width="2" stroke-opacity=".6"/>
+              <!-- 판독 데이터선: 감시탑 → 서버실 -->
+              <path d="M640 282V344H438" stroke="#b4261d" stroke-width="1.2" stroke-dasharray="4 2" fill="none"/>
+              <text x="548" y="340" font-size="7" fill="#b4261d" text-anchor="middle">판독 데이터 → 서버실</text>
+              <!-- 이송선 발사대 기초 -->
+              <rect x="696" y="282" width="68" height="30" fill="#e2dac7" stroke="#1d1a15" stroke-width="1.2"/>
+              <rect x="696" y="282" width="68" height="30" fill="url(#hatch)"/>
+              <path d="M704 312v14M756 312v14M730 312v18" stroke="#1d1a15" stroke-width="1.4"/>
+              <rect x="470" y="298" width="80" height="11" fill="#fbf8ef" stroke="#b4261d" stroke-width=".7"/><text x="474" y="306" font-size="7" fill="#b4261d">3·4구역 급수 제한 →</text>
+            </g>
+            <!-- 축척 -->
+            <g aria-hidden="true">
+              <rect x="672" y="372" width="120" height="22" fill="#fbf8ef" stroke="#1d1a15"/>
+              <path d="M680 386h50M730 386h50" stroke="#1d1a15" stroke-width="3"/><path d="M730 386h50" stroke="#fbf8ef" stroke-width="1.6"/>
+              <text x="680" y="382" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">0</text>
+              <text x="726" y="382" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">50</text>
+              <text x="770" y="382" font-size="7" fill="#1d1a15" font-family="ui-monospace,Menlo,monospace">100m</text>
             </g>
 
-            <!-- 해수면 -->
-            <rect id="water" x="0" y="318" width="800" height="40" fill="#2b6784" opacity=".55"/>
-            <path id="waterline" d="M0 318q25-4 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0" stroke="#7fc5e6" stroke-opacity=".5" fill="none"/>
+            <!-- 지하수위 (해수면 상승) -->
+            <rect id="water" x="0" y="318" width="800" height="120" fill="#2a5590" fill-opacity=".1"/>
+            <rect x="0" y="0" width="800" height="120" fill="url(#waves)" fill-opacity=".8" transform="translate(0 318)" id="waterhatch"/>
+            <text id="waterlabel" x="520" y="0" font-size="7.5" fill="#2a5590" font-family="ui-monospace,Menlo,monospace" transform="translate(0 318)">▽ 지하수위 (해수면 연동)</text>
+            <path id="waterline" d="M0 318q25-4 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0" stroke="#2a5590" stroke-width="1.4" fill="none"/>
 
             <!-- 내 위치 -->
             <g id="marker" style="transform:translate(360px,262px)">
-              <circle class="ring" r="9" fill="none" stroke="#f0b44c" stroke-width="1.6"/>
-              <circle r="4" fill="#f0b44c"/>
+              <circle class="ring" r="9" fill="none" stroke="#b4261d" stroke-width="1.6"/>
+              <circle r="4" fill="#b4261d"/>
             </g>
           </svg>
+          <div class="scene-cap"><span>첨부 1 · 제7 수용구 단면도</span><span style="color:#b4261d">● 본인 위치</span></div>
         </div>
 
         <div class="world" id="world" aria-label="사회 지표"></div>
 
         <div class="console" aria-live="off">
-          <div class="console-head mono">분석기 콘솔</div>
+          <div class="console-head mono">분석기 처리 기록</div>
           <div id="console-lines" class="console-lines mono"></div>
         </div>
 

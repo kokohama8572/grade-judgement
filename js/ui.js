@@ -72,13 +72,22 @@
   /* ---------------- 장면(SVG) ---------------- */
   function buildScene() {
     const rnd = (a, b) => a + Math.random() * (b - a);
-    // 1 돔
+    // 1 돔 (뒷줄은 옅게)
+    const back = $('#z1-back');
+    back.innerHTML = '';
+    [[56, 236, 14, 46], [82, 214, 14, 68], [118, 196, 12, 86], [156, 206, 12, 76], [186, 222, 12, 60], [214, 238, 14, 44]].forEach(([x, y, w, h]) => {
+      back.appendChild(svgEl('rect', { x, y, width: w, height: h }));
+      for (let yy = y + 5; yy < 278; yy += 8) back.appendChild(svgEl('path', { d: `M${x + 3} ${yy}h${w - 6}`, 'stroke-dasharray': '2 2', 'stroke-opacity': 0.5 }));
+    });
     const z1 = $('#z1-bld');
     z1.innerHTML = '';
     [[68, 208, 18, 74], [96, 186, 22, 96], [131, 164, 26, 118], [168, 198, 20, 84], [196, 224, 22, 58]].forEach(([x, y, w, h]) => {
       z1.appendChild(svgEl('rect', { x, y, width: w, height: h }));
+      z1.appendChild(svgEl('path', { d: `M${x + w / 2} ${y}v-6`, fill: 'none' }));
+      z1.appendChild(svgEl('rect', { x: x + w * 0.68, y: y + 0.5, width: w * 0.32 - 0.5, height: h - 1, fill: 'url(#shade)', stroke: 'none' }));
+      z1.appendChild(svgEl('path', { d: `M${x - 1} ${y}h${w + 2}`, fill: 'none', 'stroke-width': 2 }));
       for (let yy = y + 6; yy < 278; yy += 9) for (let xx = x + 4; xx < x + w - 3; xx += 6) {
-        if (Math.random() < 0.55) z1.appendChild(svgEl('rect', { x: xx, y: yy, width: 3, height: 4, fill: '#5ad0c4', opacity: rnd(0.5, 0.95), class: Math.random() < 0.12 ? 'win' : '' }));
+        if (Math.random() < 0.55) z1.appendChild(svgEl('rect', { x: xx, y: yy, width: 3, height: 4, fill: '#1f6560', stroke: 'none', opacity: rnd(0.45, 0.9), class: Math.random() < 0.12 ? 'win' : '' }));
       }
     });
     // 2 거주구
@@ -86,22 +95,38 @@
     z2.innerHTML = '';
     for (let i = 0; i < 6; i++) {
       const x = 288 + i * 26, h = 30 + (i % 3) * 6, y = 282 - h;
-      z2.appendChild(svgEl('rect', { x, y, width: 22, height: h, fill: '#222e3b' }));
-      z2.appendChild(svgEl('path', { d: `M${x - 2} ${y}L${x + 11} ${y - 10}L${x + 24} ${y}Z`, fill: '#2d3b4b' }));
-      z2.appendChild(svgEl('rect', { x: x + 6, y: y + 8, width: 4, height: 5, fill: '#f0b44c', opacity: 0.8, class: i % 2 ? 'win' : '' }));
-      z2.appendChild(svgEl('rect', { x: x + 13, y: y + 8, width: 4, height: 5, fill: '#f0b44c', opacity: 0.5 }));
+      z2.appendChild(svgEl('rect', { x, y, width: 22, height: h, fill: '#f4efe3', stroke: '#1d1a15' }));
+      z2.appendChild(svgEl('rect', { x: x + 15, y: y + 0.5, width: 6.5, height: h - 1, fill: 'url(#shade)' }));
+      z2.appendChild(svgEl('path', { d: `M${x - 2} ${y}L${x + 11} ${y - 10}L${x + 24} ${y}Z`, fill: '#d8cfbb', stroke: '#1d1a15' }));
+      z2.appendChild(svgEl('rect', { x: x + 6, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.8, class: i % 2 ? 'win' : '' }));
+      z2.appendChild(svgEl('rect', { x: x + 13, y: y + 8, width: 4, height: 5, fill: '#2a5590', opacity: 0.5 }));
+      z2.appendChild(svgEl('rect', { x: x + 8, y: 274, width: 6, height: 8, fill: '#d8cfbb', stroke: '#1d1a15' }));
     }
     // 3 컨테이너
     const z3 = $('#z3-bld');
     z3.innerHTML = '';
-    const cc = ['#4d4036', '#37485a', '#5b3d36', '#3d4e44', '#51493a'];
+    const cc = ['#d9b98a', '#b9c6cf', '#d8a99a', '#bccbb6', '#e0cf9c'];
     for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) {
       if (r === 2 && c % 2) continue;
       const x = 478 + c * 37 + (r === 1 ? 6 : 0), y = 282 - 18 * (r + 1);
-      z3.appendChild(svgEl('rect', { x, y, width: 34, height: 17, fill: cc[(r * 4 + c) % cc.length] }));
-      z3.appendChild(svgEl('path', { d: `M${x + 4} ${y + 2}V${y + 15}M${x + 10} ${y + 2}V${y + 15}M${x + 16} ${y + 2}V${y + 15}`, stroke: '#00000040', fill: 'none' }));
-      if (Math.random() < 0.5) z3.appendChild(svgEl('rect', { x: x + 24, y: y + 5, width: 5, height: 4, fill: '#f0b44c', opacity: 0.7, class: 'win' }));
+      z3.appendChild(svgEl('rect', { x, y, width: 34, height: 17, fill: cc[(r * 4 + c) % cc.length], stroke: '#1d1a15' }));
+      z3.appendChild(svgEl('rect', { x: x + 0.5, y: y + 12, width: 33, height: 4.5, fill: 'url(#shade)' }));
+      z3.appendChild(svgEl('path', { d: `M${x + 4} ${y + 2}V${y + 15}M${x + 10} ${y + 2}V${y + 15}M${x + 16} ${y + 2}V${y + 15}`, stroke: '#1d1a1555', fill: 'none' }));
+      if (Math.random() < 0.5) z3.appendChild(svgEl('rect', { x: x + 24, y: y + 5, width: 5, height: 4, fill: '#1d1a15', opacity: 0.55, class: 'win' }));
     }
+    // 사람들 (4구역은 이송선 쪽으로 줄을 선다)
+    const ppl = $('#people');
+    ppl.innerHTML = '';
+    const person = (x, alpha = 1) => {
+      const g = svgEl('g', { opacity: alpha });
+      g.appendChild(svgEl('path', { d: `M${x} 282l1.6-5.5l1.6 5.5M${x + 1.6} 276.5v-5M${x - 0.6} 273.5h4.4` }));
+      g.appendChild(svgEl('circle', { cx: x + 1.6, cy: 269.2, r: 1.8, fill: '#1d1a15', stroke: 'none' }));
+      ppl.appendChild(g);
+    };
+    [96, 220].forEach((x) => person(x, 0.7));
+    [300, 352, 412].forEach((x) => person(x));
+    [470, 492, 540, 600, 614].forEach((x) => person(x));
+    for (let x = 664; x <= 704; x += 6.5) person(x);
     // 4 울타리
     const f = $('#z4-fence');
     f.innerHTML = '';
@@ -114,9 +139,11 @@
     $('#marker').style.transform = `translate(${x}px,${y}px)`;
   }
   function updateWater(t) {
-    const y = Math.max(300, 322 - t * 1.5);
+    const y = Math.max(320, 392 - t * 5.5);
     $('#water').setAttribute('y', y);
     $('#waterline').setAttribute('transform', `translate(0 ${y - 318})`);
+    $('#waterhatch').setAttribute('transform', `translate(0 ${y})`);
+    $('#waterlabel').setAttribute('transform', `translate(0 ${y - 3})`);
   }
   function launchShip() {
     const ship = $('#ship');
@@ -137,6 +164,8 @@
       d.innerHTML = `<div class="stat-top"><span class="nm">${name}${sub ? `<small>${sub}</small>` : ''}</span><span class="val mono">0</span></div><div class="bar"><i style="--c:var(${cv})"></i></div>`;
       wrap.appendChild(d);
     });
+    $('#hud-vitals').innerHTML = STAT_ORDER.map(([k, name, cv]) =>
+      `<div class="hv" data-k="${k}"><span>${name}</span><div class="bar"><i style="--c:var(${cv})"></i></div></div>`).join('');
     const g = $('#gauge');
     g.innerHTML = '';
     for (let i = 0; i < 10; i++) g.appendChild(document.createElement('i'));
@@ -148,7 +177,11 @@
       const node = $(`.stat[data-k="${k}"]`);
       node.querySelector('.bar i').style.width = `${v}%`;
       node.querySelector('.val').textContent = v;
-      node.classList.toggle('low', v < 25 && (k === 'health' || k === 'food' || k === 'mind'));
+      const low = v < 25 && (k === 'health' || k === 'food' || k === 'mind');
+      node.classList.toggle('low', low);
+      const hv = $(`.hv[data-k="${k}"]`);
+      hv.querySelector('i').style.width = `${v}%`;
+      hv.classList.toggle('low', low);
       if (prevStats[k] != null && prevStats[k] !== v) {
         const d = v - prevStats[k];
         const pop = document.createElement('span');
@@ -169,6 +202,22 @@
     $('#g-name').textContent = Game.GRADES[g].name;
     $('#g-desc').textContent = Game.GRADES[g].desc;
     moveMarker(g);
+    syncReview(s);
+  }
+
+  function syncReview(s) {
+    const box = $('#next-review');
+    let text, cls = '';
+    if (s.grade === 5) text = '분석기 평가 대상 아님';
+    else if (s.transferAt != null) { text = '⚠ 재배치 호출 예정'; cls = 'bad'; }
+    else {
+      const next = (Math.floor(s.t / C.REVIEW_EVERY) + 1) * C.REVIEW_EVERY;
+      const m = Math.max(0, Math.ceil((next - s.t) * 12 - 1e-6));
+      text = next >= C.YEARS ? `공청회까지 ${m}개월` : `다음 재분류까지 ${m}개월`;
+      if (m <= 3) cls = 'warn';
+    }
+    if (box.textContent !== text) box.textContent = text;
+    box.className = `next-review mono ${cls}`;
   }
 
   function syncGauge(s) {
@@ -223,7 +272,7 @@
     d.textContent = text;
     if (cls) d.className = cls;
     box.appendChild(d);
-    while (box.children.length > 7) box.firstChild.remove();
+    while (box.children.length > 16) box.firstChild.remove();
   }
 
   function ambient(s) {
@@ -251,7 +300,7 @@
 
   function renderLogItem(e, atTop = true) {
     const li = document.createElement('li');
-    li.className = e.type;
+    li.className = `log-${e.type}`;
     li.innerHTML = `<span class="d">${esc(e.date)}</span>${esc(e.text)}`;
     const ol = $('#log');
     if (atTop) ol.prepend(li); else ol.appendChild(li);
@@ -363,6 +412,7 @@
   function setSpeed(v) {
     speed = v;
     $$('.spd').forEach((b) => b.classList.toggle('on', Number(b.dataset.speed) === v));
+    $('#screen-game').classList.toggle('paused', v === 0);
   }
   function setMode(m) {
     mode = m;
@@ -483,7 +533,7 @@
       const a = hist[i], b = hist[i + 1];
       const w = x(b.t) - x(a.t);
       svg += `<rect x="${x(a.t)}" y="8" width="${Math.max(0, w)}" height="18" fill="${gc[a.grade]}" opacity=".85"/>`;
-      if (w > 18) svg += `<text x="${x(a.t) + w / 2}" y="21" text-anchor="middle" style="fill:#06101a;font-weight:700">${a.grade === 5 ? '–' : a.grade}</text>`;
+      if (w > 18) svg += `<text x="${x(a.t) + w / 2}" y="21" text-anchor="middle" style="fill:#f8f4ea;font-weight:700">${a.grade === 5 ? '–' : a.grade}</text>`;
     }
     svg += `<text x="${pl}" y="36" style="font-size:9px">등급 ▲</text>`;
     // grid
